@@ -54,20 +54,20 @@ abstract class backEnd {
     var xUpper = player.location.x + 50
     var yLower = player.location.y - 50
     var yUpper = player.location.y + 50
-    var proximty = Map.empty[String, Player]
+    var proximity = Map.empty[String, String]
     for (users <- players.keysIterator){
       var loc = players(users).location
       if ((xLower < loc.x && loc.x < xUpper) && (yLower < loc.y && loc.y < yUpper)){
-        proximty ++ Map(users -> players(users))
+        proximity ++ Map(users -> players(users).toString())
       }
     }
     for (munch <- food.keysIterator){
       var loc = players(munch).location
       if ((xLower < loc.x && loc.x < xUpper) && (yLower < loc.y && loc.y < yUpper)){
-        proximty ++ Map(munch -> players(munch))
+        proximity ++ Map(munch -> players(munch).toString())
       }
     }
-    var js: JsValue = Json.toJson(proximty)
+    var js: JsValue = Json.toJson(proximity)
     var kill = Json.toJson(players(user).killState)
     var jsonMap: Map[String, JsValue] = Map("kill" -> kill, "locations" -> js)
     Json.stringify(Json.toJson(jsonMap))
