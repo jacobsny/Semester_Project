@@ -1,5 +1,7 @@
 package serverBackEnd
 
+import play.api.libs.json.{JsValue, Json}
+
 abstract class backEnd {
   var players: Map[String, Player] = Map.empty
   var food: Map[String, Player] = Map.empty
@@ -52,19 +54,22 @@ abstract class backEnd {
     var xUpper = player.location.x + 50
     var yLower = player.location.y - 50
     var yUpper = player.location.y + 50
-    var proximty = Map.empty
+    var proximty = Map.empty[String, Player]
     for (users <- players.keysIterator){
       var loc = players(users).location
       if ((xLower < loc.x && loc.x < xUpper) && (yLower < loc.y && loc.y < yUpper)){
-        proximty(users -> players(users))
+        proximty ++ Map(users -> players(users))
       }
     }
-    for (users <- food.keysIterator){
-      var loc = players(users).location
+    for (munch <- food.keysIterator){
+      var loc = players(munch).location
       if ((xLower < loc.x && loc.x < xUpper) && (yLower < loc.y && loc.y < yUpper)){
-        proximty(users -> players(users))
+        proximty ++ Map(munch -> players(munch))
       }
     }
-
+    var js: JsValue = Json.toJson(proximty)
+    var kill = Json.toJson(players(user).killState)
+    var jsonMap: Map[String, JsValue] = Map("kill" -> kill, "locations" -> js)
+    Json.stringify(Json.toJson(jsonMap))
   }
 }
