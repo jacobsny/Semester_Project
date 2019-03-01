@@ -34,6 +34,13 @@
             <artifactId>scalaj-http_2.12</artifactId>
             <version>2.4.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.scalatra/scalatra -->
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra_2.12</artifactId>
+            <version>2.6.5</version>
+        </dependency>
+
 
     </dependencies>
 </project>

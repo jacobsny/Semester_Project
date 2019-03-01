@@ -2,10 +2,13 @@ package serverBackEnd
 
 import play.api.libs.json.{JsValue, Json}
 
-abstract class backEnd {
+class backEnd {
   var players: Map[String, Player] = Map.empty
   var food: Map[String, Player] = Map.empty
 
+  def newGuy(name:String, player: Player): Unit ={
+    players = players ++ Map(name -> player)
+  }
   def kill(player: Player): Unit ={
     player.killState = true
   }
@@ -15,16 +18,14 @@ abstract class backEnd {
     if (player1.size > player2.size){
       kill(player2)
       player1.size += player2.size
-      players -= obj2
     }
     else if(player1.size < player2.size){
       kill(player1)
       player2.size += player1.size
-      players -= obj
     }
   }
-  def updatePlayer(name: String, obj:Player): Unit = {
-    players(name).location = obj.location
+  def updatePlayer(name: String, loc: Location): Unit = {
+    players(name).location = loc
   }
 
   def findIfIntersect(str: String, str1: String): Boolean = {
@@ -58,13 +59,13 @@ abstract class backEnd {
     for (users <- players.keysIterator){
       var loc = players(users).location
       if ((xLower < loc.x && loc.x < xUpper) && (yLower < loc.y && loc.y < yUpper)){
-        proximity ++ Map(users -> players(users).toString())
+        proximity = proximity ++ Map(users -> players(users).toString())
       }
     }
     for (munch <- food.keysIterator){
       var loc = players(munch).location
       if ((xLower < loc.x && loc.x < xUpper) && (yLower < loc.y && loc.y < yUpper)){
-        proximity ++ Map(munch -> players(munch).toString())
+        proximity = proximity ++ Map(munch -> players(munch).toString())
       }
     }
     var js: JsValue = Json.toJson(proximity)
