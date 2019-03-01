@@ -1,6 +1,6 @@
 package serverBackEnd
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsArray, JsValue, Json}
 
 class backEnd {
   var players: Map[String, Player] = Map.empty
@@ -23,9 +23,6 @@ class backEnd {
       kill(player1)
       player2.size += player1.size
     }
-  }
-  def updatePlayer(name: String, loc: Location): Unit = {
-    players(name).location = loc
   }
 
   def findIfIntersect(str: String, str1: String): Boolean = {
@@ -72,5 +69,11 @@ class backEnd {
     var kill = Json.toJson(players(user).killState)
     var jsonMap: Map[String, JsValue] = Map("kill" -> kill, "locations" -> js)
     Json.stringify(Json.toJson(jsonMap))
+  }
+  def fromJSON(string: String): Unit ={
+    var parsed = Json.parse(string)
+    var name = (parsed \ "nameid").as[String]
+    var loc = (parsed \ "location").as[Array[Double]]
+    players(name).location = new Location(loc(0),loc(1))
   }
 }

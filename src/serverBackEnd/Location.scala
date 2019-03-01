@@ -6,4 +6,7 @@ class Location(var x: Double, var y: Double) {
   def equals(obj: Location): Boolean ={
     this.x == obj.x && this.y == obj.y
   }
+  def toArray(): Array[Double] ={
+    Array(x, y)
+  }
 }
