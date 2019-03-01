@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
     <groupId>edu.buffalo.cse</groupId>
-    <artifactId>cse116</artifactId>
+    <artifactId>semesterProjectSDJ</artifactId>
     <modelVersion>4.0.0</modelVersion>
     <url>http://maven.apache.org</url>
     <version>0.0.1</version>
@@ -12,6 +12,13 @@
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.12</artifactId>
             <version>3.0.5</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.scalafx/scalafx -->
