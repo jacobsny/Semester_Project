@@ -21,7 +21,8 @@ class backEnd {
     var name: String = generateName()
     var player: Player = generatePlayer()
     players = players ++ Map(name -> player)
-    Json.stringify(Json.toJson(name))
+    var returnMap = Map("nameid" -> Json.toJson(name), "location" -> Json.toJson(player.location.toArray()))
+    Json.stringify(Json.toJson(returnMap))
   }
   def kill(player: Player): Unit ={
     player.killState = true
