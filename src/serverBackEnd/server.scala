@@ -13,6 +13,9 @@ abstract class server extends ScalatraServlet {
     val jsonString = request.body
     var response = code.fromJSON(jsonString)
   }
+  get("/newPlayerEndpoint"){
+
+  }
 
 
 }

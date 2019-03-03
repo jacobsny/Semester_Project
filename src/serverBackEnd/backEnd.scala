@@ -1,13 +1,27 @@
 package serverBackEnd
 
-import play.api.libs.json.{JsArray, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 
 class backEnd {
   var players: Map[String, Player] = Map.empty
   var food: Map[String, Player] = Map.empty
-
-  def newGuy(name:String, player: Player): Unit ={
+  def generateName(): String = {
+    var id = (Math.random()*9000)+1000
+    while(players.contains("name" + id)){
+      id = (Math.random()*9000)+1000
+    }
+    "name" + id
+  }
+  def generatePlayer(): Player = {
+    var ply = new Player()
+    ply.location.generate()
+    ply
+  }
+  def newGuy(): String ={
+    var name: String = generateName()
+    var player: Player = generatePlayer()
     players = players ++ Map(name -> player)
+    Json.stringify(Json.toJson(name))
   }
   def kill(player: Player): Unit ={
     player.killState = true
@@ -70,7 +84,7 @@ class backEnd {
     var jsonMap: Map[String, JsValue] = Map("kill" -> kill, "locations" -> js)
     Json.stringify(Json.toJson(jsonMap))
   }
-  def invalidRequest(str: String): String ={
+  def invalidRequest(str: String): String = {
     Json.stringify(Json.toJson(Map("kill" -> Json.toJson(true), "locations" -> Json.toJson("N/A"))))
   }
   def fromJSON(string: String): String ={
