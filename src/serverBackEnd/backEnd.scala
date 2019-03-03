@@ -70,10 +70,19 @@ class backEnd {
     var jsonMap: Map[String, JsValue] = Map("kill" -> kill, "locations" -> js)
     Json.stringify(Json.toJson(jsonMap))
   }
-  def fromJSON(string: String): Unit ={
+  def invalidRequest(str: String): String ={
+    Json.stringify(Json.toJson(Map("kill" -> Json.toJson(true), "locations" -> Json.toJson("N/A"))))
+  }
+  def fromJSON(string: String): String ={
     var parsed = Json.parse(string)
     var name = (parsed \ "nameid").as[String]
     var loc = (parsed \ "location").as[Array[Double]]
-    players(name).location = new Location(loc(0),loc(1))
+    if (players.contains(name)){
+      players(name).location = new Location(loc(0),loc(1))
+      toJson(name)
+    }
+    else {
+      invalidRequest(name)
+    }
   }
 }
