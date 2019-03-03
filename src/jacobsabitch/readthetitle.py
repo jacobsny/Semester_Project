@@ -1,6 +1,6 @@
 import pygame
-import psyco
-psyco.full()
+#import psyco#
+#psyco.full()#
 pygame.init()
 
 def game(xaxis, yaxis):
@@ -20,6 +20,10 @@ def game(xaxis, yaxis):
         l = window(xaxis, yaxis, later, screen)
         later = l
 
+def collectbles(screen, holders, x, y):
+        normal = (255, 0, 255)
+        for i in holders:
+            pygame.draw.rect(screen, normal, (i[0], i[1], 6, 12))
 
 
 def window(xaxis, yaxis, later, screen):
@@ -29,15 +33,18 @@ def window(xaxis, yaxis, later, screen):
     vel = 10
     updatelater = playerprofile(x, y, vel)
     screen.fill([255, 255, 255])
-    pygame.draw.rect(screen, (0, 255, 17), (updatelater[0], updatelater[1], updatelater[2], updatelater[3]))
+    holders = [[120, 120], [130, 130]]  ## Just to see if they display, the function in the backend will remove them
+    collectbles(screen, holders, x, y)
+    pygame.draw.circle(screen, (0, 255, 17), (updatelater[0], updatelater[1]), updatelater[2])
     dirt = (updatelater[0], updatelater[1])
     pygame.display.update()
     return dirt
 
 
+
 def playerprofile(x, y, vel): #your going to need to add a name parameter in here which can return a plyer#
     width = 40
-    height = 60
+    #height = 60#
     move = pygame.key.get_pressed()
     if move[pygame.K_LEFT]:
         x = x - vel
@@ -47,7 +54,7 @@ def playerprofile(x, y, vel): #your going to need to add a name parameter in her
         y = y - vel
     if move[pygame.K_DOWN]:
         y = y + vel
-    return [x, y, width, height, vel] #gunna need to include char names#
+    return [x, y, width, vel] #gunna need to include char names#
 
 
 
