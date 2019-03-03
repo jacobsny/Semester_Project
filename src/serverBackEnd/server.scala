@@ -11,7 +11,7 @@ abstract class server extends ScalatraServlet {
 //post that calls fromJSON using stephen's location JSON
   post("/playerupdate") {
     val jsonString = request.body
-
+    var response = code.fromJSON(jsonString)
   }
 
 
