@@ -6,9 +6,9 @@ class backEnd {
   var players: Map[String, Player] = Map.empty
   var food: Map[String, Player] = Map.empty
   def generateName(): String = {
-    var id = Math.random() * 9000 + 1000
+    var id: Int = ((math floor Math.random() * 100) * 90 + 100).toInt
     while(players.contains("name" + id)){
-      id = Math.random() * 9000 + 1000
+      id = ((math floor Math.random() * 100) * 90 + 100).toInt
     }
     "name" + id
   }
