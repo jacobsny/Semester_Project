@@ -9,4 +9,8 @@ class Location(var x: Double, var y: Double) {
   def toArray(): Array[Double] ={
     Array(x, y)
   }
+  def generate(): Unit = {
+    x = (math floor Math.random() * 100) * 2 - 99
+    y = (math floor Math.random() * 100) * 2 - 99
+  }
 }
