@@ -1,4 +1,4 @@
-import random,json,math
+import random, json, math
 
 
 class Location:
@@ -23,101 +23,132 @@ class Player:
     killState = False
 
     def string(self):
-        return "[" + self.location.x + "," + self.location.y + "," + self.size + "]"
+        return "[" + str(self.location.x) + "," + str(self.location.y) + "," + str(self.size) + "]"
 
-class backEnd:
-    players = {}
-    food = {}
 
-    def generateName(self):
+players = {}
+food = {}
+
+
+def generateName():
+    id1 = random.randint(0, 9)
+    id2 = random.randint(0, 9)
+    id3 = random.randint(0, 9)
+    id4 = random.randint(0, 9)
+    id = str(id1) + str(id2) + str(id3) + str(id4)
+    while str("name" + id) in players:
         id1 = random.randint(0, 9)
         id2 = random.randint(0, 9)
         id3 = random.randint(0, 9)
         id4 = random.randint(0, 9)
         id = str(id1) + str(id2) + str(id3) + str(id4)
-        while str("name" + id) in self.players:
-            id1 = random.randint(0, 9)
-            id2 = random.randint(0, 9)
-            id3 = random.randint(0, 9)
-            id4 = random.randint(0, 9)
-            id = str(id1) + str(id2) + str(id3) + str(id4)
-        return str("name" + id)
+    return str("name" + id)
 
-    def generatePlayer(self):
-        ply = Player()
-        ply.location.generate()
-        return ply
 
-    def newGuy(self):
-        name = self.generateName()
-        player = self.generatePlayer()
-        self.players[name] = player
-        returnMap = {"nameid": name, "location": player.location.array()}
-        return json.dumps(returnMap)
+def generatePlayer():
+    ply = Player()
+    ply.location.generate()
+    return ply
 
-    def kill(self, player):
-        player.killState = True
 
-    def eat(self, obj, obj2):
-        player1 = self.players[obj]
-        player2 = self.players[obj2]
-        if player1.size > player2.size:
-            self.kill(player2)
-            player1.size += player2.size
-        elif player1.size < player2.size:
-            self.kill(player1)
-            player2.size += player1.size
+def newGuy():
+    name = generateName()
+    player = generatePlayer()
+    players[name] = player
+    returnMap = {"nameid": name, "location": player.location.array()}
+    return json.dumps(returnMap)
 
-    def findIfIntersect(self, str, str1):
-        user1 = self.players[str].location
-        user2 = self.players[str1].location
-        totalSize = self.players[str].size + self.players[str1].size
-        return user1.distance(user2) <= totalSize
 
-    def checkCollision(self):
-        for user in self.players:
-            for user2 in self.players:
-                if user != user2 and self.findIfIntersect(user,user2):
-                    self.eat(user,user2)
-            for munch in self.food:
-                if self.findIfIntersect(user,munch):
-                    self.players[user].size += self.food[munch].size
-                    del self.food[munch]
+def kill(player):
+    player.killState = True
 
-    def toJSON(self, user):
-        player = self.players[user]
-        xLower = player.location.x - 50
-        xUpper = player.location.x + 50
-        yLower = player.location.y - 50
-        yUpper = player.location.y + 50
-        proximity = {}
-        for users in self.players:
-            loc = self.players[users].location
-            if (xLower < loc.x < xUpper) and (yLower < loc.y < yUpper):
-                proximity[users] = self.players[users].string()
-        for munch in self.players:
-            loc = self.players[munch].location
-            if (xLower < loc.x < xUpper) and (yLower < loc.y < yUpper):
-                proximity[munch] = self.players[munch].string()
-        kill = self.players[user].killState
-        jsonMap = {"kill": kill, "locations": proximity}
-        return json.dumps(jsonMap)
 
-    def invalidRequest(self):
-        json.dumps({"kill": True, "locations": "N/A"})
+def eat(obj, obj2):
+    player1 = players[obj]
+    player2 = players[obj2]
+    if player1.size > player2.size:
+        kill(player2)
+        player1.size += player2.size
+    elif player1.size < player2.size:
+        kill(player1)
+        player2.size += player1.size
 
-    def fromJSON(self, string):
-        parsed = json.loads(string)
-        name = parsed["nameid"]
-        loc = parsed["location"]
-        if(name in self.players):
-            self.players[name].location = Location(loc[0],loc[1])
-            self.toJSON(name)
-        else:
-            self.invalidRequest()
+
+def findIfIntersect(str, str1):
+    user1 = players[str].location
+    user2 = players[str1].location
+    totalSize = players[str].size + players[str1].size
+    return user1.distance(user2) <= totalSize
+
+
+def checkCollision():
+    for user in players:
+        for user2 in players:
+            if user != user2 and findIfIntersect(user,user2):
+                eat(user,user2)
+        for munch in food:
+            if findIfIntersect(user,munch):
+                players[user].size += food[munch].size
+                del food[munch]
+
+
+def convertToMonitor(user, map):
+    userLoc = map[user].location
+    originx = userLoc.x + 960
+    originy = userLoc.y - 540
+    for i in map:
+        temp = map[i]
+        x = originx - temp.location.x
+        y = temp.location.y - originy
+        temp.location = Location(x, y)
+        string = temp.string()
+        map[i] = string
+    return map
 
 
 
+def toJSON(user):
+    player = players[user]
+    xLower = player.location.x - 960
+    xUpper = player.location.x + 960
+    yLower = player.location.y - 540
+    yUpper = player.location.y + 540
+    proximity = {}
+    for users in players:
+        loc = players[users].location
+        if (xLower < loc.x < xUpper) and (yLower < loc.y < yUpper):
+            proximity.update({users: players[users]})
+            #proximity[users] = players[users]
+    for munch in food:
+        loc = players[munch].location
+        if (xLower < loc.x < xUpper) and (yLower < loc.y < yUpper):
+            proximity.update({munch: food[munch]})
+            #proximity[munch] = food[munch]
+    proximity = convertToMonitor(user, proximity)
+    kill = players[user].killState
+    jsonMap = {"kill": kill, "locations": proximity}
+    return json.dumps(jsonMap)
 
 
+def invalidRequest():
+    json.dumps({"kill": True, "locations": "N/A"})
 
+
+def fromJSON(string):
+    parsed = json.loads(string)
+    name = parsed["nameid"]
+    loc = parsed["location"]
+    if name in players:
+        players[name].location = Location(loc[0],loc[1])
+        return toJSON(name)
+    else:
+        return invalidRequest()
+
+
+jsonresponse = newGuy()
+i = 0
+while i < 100:
+    newGuy()
+    i += 1
+print(jsonresponse)
+print(fromJSON(jsonresponse))
