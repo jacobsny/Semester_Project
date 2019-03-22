@@ -16,6 +16,10 @@ class Location:
         self.x = random.randint(-50, 50)
         self.y = random.randint(-50, 50)
 
+    def generateFood(self):
+        self.x = random.randint(-300, 300)
+        self.y = random.randint(-300,300)
+
 
 class Player:
     location = Location(0, 0)
@@ -45,18 +49,46 @@ def generateName():
     return str("name" + id)
 
 
+def generateFood():
+    id1 = random.randint(0, 9)
+    id2 = random.randint(0, 9)
+    id3 = random.randint(0, 9)
+    id4 = random.randint(0, 9)
+    id = str(id1) + str(id2) + str(id3) + str(id4)
+    while str("food" + id) in food:
+        id1 = random.randint(0, 9)
+        id2 = random.randint(0, 9)
+        id3 = random.randint(0, 9)
+        id4 = random.randint(0, 9)
+        id = str(id1) + str(id2) + str(id3) + str(id4)
+    return str("food" + id)
+
+
 def generatePlayer():
     ply = Player()
     ply.location.generate()
     return ply
 
 
+def generateFoodPlayer():
+    ply = Player()
+    ply.location.generateFood()
+    ply.size = 1
+    return ply
+
+
 def newGuy():
-    name = generateName()
+    name = generateFood()
     player = generatePlayer()
     players[name] = player
     returnMap = {"nameid": name, "location": player.location.array()}
     return json.dumps(returnMap)
+
+
+def newFood():
+    foodBit = generateFood()
+    munch = generateFoodPlayer()
+    players[foodBit] = munch
 
 
 def kill(player):
@@ -85,7 +117,7 @@ def checkCollision():
     for user in players:
         for user2 in players:
             if user != user2 and findIfIntersect(user,user2):
-                eat(user,user2)
+                eat(user, user2)
         for munch in food:
             if findIfIntersect(user,munch):
                 players[user].size += food[munch].size
@@ -144,10 +176,5 @@ def fromJSON(string):
         return invalidRequest()
 
 
-#jsonresponse = newGuy()
-#i = 0
-#while i < 100:
-#    newGuy()
-#    i += 1
-#print(jsonresponse)
-#print(fromJSON(jsonresponse))
+while len(food) < 200:
+    newFood()
