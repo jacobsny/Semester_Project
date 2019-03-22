@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return '<b>Hello World</b>!'
+    return render_template("logon.html")
 
 
 @app.route('/game')
