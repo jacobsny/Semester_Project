@@ -178,3 +178,6 @@ def fromJSON(string):
 
 while len(food) < 200:
     newFood()
+
+print(food)
+

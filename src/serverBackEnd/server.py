@@ -1,7 +1,6 @@
 import bottle
 from bottle import route, run, template, post, request, get
 import backEnd
-import requests
 
 
 @route('/')
@@ -11,7 +10,8 @@ def index():
 
 @route('/game')
 def index():
-    return bottle.static_file("index.html", root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
+    return bottle.static_file("index.html",
+                              root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
 
 
 @route('/frontendgui.js')
@@ -22,12 +22,14 @@ def index():
 
 @route('/individual.js')
 def index():
-    return bottle.static_file("individual.js", root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
+    return bottle.static_file("individual.js",
+                              root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
 
 
 @route('/themdots.js')
 def index():
-    return bottle.static_file("themdots.js", root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
+    return bottle.static_file("themdots.js",
+                              root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
 
 
 @route('/hello/<name>')
