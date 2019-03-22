@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/scalatra/scalatra-common_2.12/2.6.5/scalatra-common_2.12-2.6.5.jar!/" />
     </CLASSES>
+    <JAVADOC />
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/scalatra/scalatra-common_2.12/2.6.5/scalatra-common_2.12-2.6.5-sources.jar!/" />
     </SOURCES>
