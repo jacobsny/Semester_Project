@@ -9,45 +9,45 @@ def index():
 
 
 @route('/game')
-def index():
-    return bottle.static_file("index.html",
-                              root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
+def gameCall():
+    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap"
+    return bottle.static_file("index.html",root= string)
 
 
 @route('/frontendgui.js')
-def index():
-    return bottle.static_file("frontendgui.js",
-                              root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
+def frontEnd():
+    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap"
+    return bottle.static_file("frontendgui.js",root=string)
 
 
 @route('/individual.js')
-def index():
-    return bottle.static_file("individual.js",
-                              root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
+def player():
+    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap"
+    return bottle.static_file("individual.js", root=string)
 
 
 @route('/themdots.js')
-def index():
-    return bottle.static_file("themdots.js",
-                              root="C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap")
+def dots():
+    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap"
+    return bottle.static_file("themdots.js", root=string)
 
 
 @route('/hello/<name>')
-def index(name):
+def testingInput(name):
     return template('<b>Hello {{name}}</b>!', name=name)
 
 
 @post('/playerupdate')
-def index():
+def update():
     postdata = request.body.read()
     response = backEnd.fromJSON(postdata)
     return response
 
 
 @get('/newPlayerEndpoint')
-def index():
+def newPlayer():
     jsonResponse = backEnd.newGuy()
     return jsonResponse
 
 
-run(host='localhost', port=8080, debug=True)
+run(host='localhost', port=8080)

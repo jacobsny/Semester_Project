@@ -1,4 +1,6 @@
-import random, json, math
+import random
+import json
+import math
 
 
 class Location:
@@ -176,8 +178,5 @@ def fromJSON(string):
         return invalidRequest()
 
 
-while len(food) < 200:
+for i in range(0,20):
     newFood()
-
-print(food)
-
