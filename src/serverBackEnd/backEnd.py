@@ -106,7 +106,6 @@ def convertToMonitor(user, map):
     return map
 
 
-
 def toJSON(user):
     player = players[user]
     xLower = player.location.x - 960
@@ -139,16 +138,16 @@ def fromJSON(string):
     name = parsed["nameid"]
     loc = parsed["location"]
     if name in players:
-        players[name].location = Location(loc[0],loc[1])
+        players[name].location = Location(loc[0], loc[1])
         return toJSON(name)
     else:
         return invalidRequest()
 
 
-jsonresponse = newGuy()
-i = 0
-while i < 100:
-    newGuy()
-    i += 1
-print(jsonresponse)
-print(fromJSON(jsonresponse))
+#jsonresponse = newGuy()
+#i = 0
+#while i < 100:
+#    newGuy()
+#    i += 1
+#print(jsonresponse)
+#print(fromJSON(jsonresponse))
