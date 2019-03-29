@@ -2,7 +2,9 @@ import random
 import json
 import math
 
-
+#python object orientated programming
+#location is a class that takes x and y
+#player class that takes location, size and kill state
 class Location:
     def __init__(self, xcor, ycor):
         self.x = xcor
@@ -30,12 +32,13 @@ class Player:
 
     def string(self):
         return "[" + str(self.location.x) + "," + str(self.location.y) + "," + str(self.size) + "]"
+#future map holding all players
+#future map holding all food
 
 
 players = {}
 food = {}
-
-
+#is called to generate a 4 digit random number to be used in player naming
 def generateName():
     id1 = random.randint(0, 9)
     id2 = random.randint(0, 9)
@@ -50,7 +53,7 @@ def generateName():
         id = str(id1) + str(id2) + str(id3) + str(id4)
     return str("name" + id)
 
-
+#is called to generate a 4 digit random number to be used in food naming
 def generateFood():
     id1 = random.randint(0, 9)
     id2 = random.randint(0, 9)
@@ -65,20 +68,22 @@ def generateFood():
         id = str(id1) + str(id2) + str(id3) + str(id4)
     return str("food" + id)
 
-
+#generates player and returns a new player
 def generatePlayer():
     ply = Player()
     ply.location.generate()
     return ply
 
-
+#generate food for the map
 def generateFoodPlayer():
     ply = Player()
     ply.location.generateFood()
     ply.size = 1
     return ply
 
-
+#endpoint for introducing a new player into the game.
+#returns a json string that Stephen will use to access
+#keys of nameid and location in format of List(x,y)
 def newGuy():
     name = generateFood()
     player = generatePlayer()
@@ -86,17 +91,19 @@ def newGuy():
     returnMap = {"nameid": name, "location": player.location.array()}
     return json.dumps(returnMap)
 
-
+#create food and add it to the food map
 def newFood():
     foodBit = generateFood()
     munch = generateFoodPlayer()
     players[foodBit] = munch
 
-
+#set kill state in map of player with id in parameter to true
 def kill(player):
     player.killState = True
 
-
+#takes two player ids and checks sizes and sees who eats who
+#larger of the two gets increased in size that of the other
+#smaller gets killed
 def eat(obj, obj2):
     player1 = players[obj]
     player2 = players[obj2]
@@ -107,14 +114,14 @@ def eat(obj, obj2):
         kill(player1)
         player2.size += player1.size
 
-
+#mathematically calculates if two players touch or cross over
 def findIfIntersect(str, str1):
     user1 = players[str].location
     user2 = players[str1].location
     totalSize = players[str].size + players[str1].size
     return user1.distance(user2) <= totalSize
 
-
+#checks all of maps to see if any players or food intersect
 def checkCollision():
     for user in players:
         for user2 in players:
@@ -125,7 +132,7 @@ def checkCollision():
                 players[user].size += food[munch].size
                 del food[munch]
 
-
+#converts to pixel use so Stephen can display on a 1920x1080
 def convertToMonitor(user, map):
     userLoc = map[user].location
     originx = userLoc.x + 960
@@ -139,7 +146,11 @@ def convertToMonitor(user, map):
         map[i] = string
     return map
 
-
+#takes a user and finds all players and food in a 1920x1080 rectangle around the user
+#returns a json that has the kill state of the user as a key
+#then has a map of locations where the key is the id of the player or food
+#and the value in the locations map is an array of (x,y,size)
+#x and y are in terms of monitor coordinates not world coordinates
 def toJSON(user):
     player = players[user]
     xLower = player.location.x - 960
@@ -162,11 +173,13 @@ def toJSON(user):
     jsonMap = {"kill": kill, "locations": proximity}
     return json.dumps(jsonMap)
 
-
+#used if someone tries to make an invalid request and they're not present in the game
 def invalidRequest():
     json.dumps({"kill": True, "locations": "N/A"})
 
-
+#is the reciepient of the POST request Stephen will make
+#first updates the player location
+#then returns the players around if they are a valid player
 def fromJSON(string):
     parsed = json.loads(string)
     name = parsed["nameid"]

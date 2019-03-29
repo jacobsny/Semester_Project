@@ -19,19 +19,19 @@ def gameCall():
 #front end js file that Stephen wrote to display his GUI
 @app.route('/frontendgui.js')
 def frontEnd():
-    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap"
+    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\serverBackEnd\\static\\frontendgui.js"
     return send_from_directory("frontendgui.js", string)
 
 #front end js file that Stephen wrote to display his player character
 @app.route('/individual.js')
 def player():
-    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap"
+    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\serverBackEnd\\static\\phaserswap"
     return send_from_directory("individual.js", string)
 
 #front end js file that Stephen wrote to display his food character
 @app.route('/themdots.js')
 def dots():
-    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\phaserswap"
+    string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\serverBackEnd\\static\\phaserswap"
     return send_from_directory("themdots.js", string)
 
 #post endpoint that will be called by Stephen using a json body
