@@ -85,7 +85,7 @@ def generateFoodPlayer():
 #returns a json string that Stephen will use to access
 #keys of nameid and location in format of List(x,y)
 def newGuy():
-    name = generateFood()
+    name = generateName()
     player = generatePlayer()
     players[name] = player
     returnMap = {"nameid": name, "location": player.location.array()}
