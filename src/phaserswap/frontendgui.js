@@ -1,18 +1,18 @@
 socket = io.connect("http://localhost:12345")
 
-var user;
-var circles;
+var user = new themcircles("This_will_have_a_json_in_part_two_from_backend"); //edited
+var circles = new User("red", startx, starty, zed. ided); //edited
 function setup() {
 
-    var aspectx = window.innerWidth
-    var aspecty = window.innerHeight
+    var aspectx =920
+    var aspecty = 680
     var zed = 23
     var ided = 223442
     createCanvas(aspectx, aspecty);
-    var x = aspectx/2
-    var y = aspecty/2
+    var startx = 400
+    var starty = 400
     circles = new themcircles("This_will_have_a_json_in_part_two_from_backend")
-    user = new User("cyan", x, y, zed. ided);
+    user = new User("red", startx, starty, zed. ided);
 
 }
 
@@ -42,6 +42,6 @@ function keyisPress(){
         console.log("R")
     }
     else {
-        user.show();
+        user.display();
     }
 }
