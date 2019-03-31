@@ -27,7 +27,7 @@ function User(colorpalet, x, y, z, id){
         this.pos.x = this.pos.x + 10
     }
 
-    this.show = function(){
+    this.display = function(){
         var xy = colordetect(colorpalet);
         fill(color(xy));
         ellipse(this.pos.x, this.pos.y, this.radius*2, this.radius*2);
