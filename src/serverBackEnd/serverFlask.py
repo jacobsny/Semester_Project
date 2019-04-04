@@ -28,6 +28,7 @@ def player():
     string = "C:\\Users\\jacob\\IdeaProjects\\Semester_Project\\src\\serverBackEnd\\static\\phaserswap"
     return send_from_directory("individual.js", string)
 
+
 #front end js file that Stephen wrote to display his food character
 @app.route('/themdots.js')
 def dots():
