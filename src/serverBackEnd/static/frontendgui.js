@@ -1,5 +1,3 @@
-socket = io.connect("http://localhost:12345")
-
 var user;
 var circles;
 function setup() {
