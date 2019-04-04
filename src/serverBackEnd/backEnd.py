@@ -171,7 +171,7 @@ def toJSON(user):
     proximity = convertToMonitor(user, proximity)
     kill = players[user].killState
     jsonMap = {"kill": kill, "locations": proximity}
-    return json.dumps(jsonMap)
+    return (jsonMap)
 
 #used if someone tries to make an invalid request and they're not present in the game
 def invalidRequest():
@@ -186,7 +186,7 @@ def fromJSON(string):
     loc = parsed["location"]
     if name in players:
         players[name].location = Location(loc[0], loc[1])
-        return toJSON(name)
+        return json.dumps(toJSON(name))
     else:
         return invalidRequest()
 
