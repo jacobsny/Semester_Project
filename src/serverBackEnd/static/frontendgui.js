@@ -1,9 +1,24 @@
-var user;
-var circles;
-function setup() {
 
-    var aspectx = window.innerWidth
-    var aspecty = window.innerHeight
+//var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+//var xhttp = new XMLHttpRequest();
+//xhttp.onreadystatechange = function() {
+    //console.log(this.readyState, this.status);
+    //if (this.readyState == 4 && this.status == 200) {
+        //whyohlordyoupieceofshit = xhttp.responseText;
+        //printer(whyohlordyoupieceofshit)
+    //}
+//};
+//xhttp.open("GET", "/newPlayerEndpoint");
+//xhttp.send();
+
+function printer(x){
+    x["location"]
+    console.log(x)
+}
+
+function setup(x) {
+    var aspectx = 900
+    var aspecty = 900
     var zed = 23
     var ided = 223442
     createCanvas(aspectx, aspecty);
@@ -11,21 +26,19 @@ function setup() {
     var y = aspecty/2
     circles = new themcircles("This_will_have_a_json_in_part_two_from_backend")
     user = new User("cyan", x, y, zed. ided);
-
 }
 
-
-function draw() {
+function draw(x) {
     background(255,255,255)
     circles.minidot();
     keyisPress();
-
-
 }
+
 function keyisPress(){
     if ((keyCode === UP_ARROW)) {
         user.up()
         console.log("W")
+
     }
     if (keyCode === DOWN_ARROW) {
         user.down()
