@@ -51,5 +51,7 @@ def newPlayer():
     return jsonResponse
 
 
+print (newPlayer())
+
 if __name__ == "__main__":
     app.run(debug=True)

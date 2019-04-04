@@ -56,3 +56,5 @@ function colordetect(colorpalet){
     }
     return cols
 }
+
+module.exports = colordetect;

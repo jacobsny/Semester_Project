@@ -1,7 +1,8 @@
 package serverBackEnd
 import org.scalatra._
 
-abstract class server extends ScalatraServlet {
+abstract class
+server extends ScalatraServlet {
   var code = new backEnd
   get("/hello/:name") {
     // Matches "GET /hello/foo" and "GET /hello/bar"

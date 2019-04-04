@@ -1,5 +1,11 @@
 import bcrypt
 import sqlite3
+import json
+import serverFlask
+import requests
+from flask import Flask
+app = Flask(__name__)
+
 
 # USE SINGLE QUOTE
 
@@ -15,7 +21,6 @@ def hash_password(stringIt):  # hash input
     return hashed
 
 
-print(hash_password("a word"))
 # print(hash_password("word") == '$2b$12$KerVzLy3YaOV/pcyt37SxOi.WbQyNKmDAAT0SSmXUO208uNv8hVwO')
 
 
@@ -40,7 +45,7 @@ def get_users():
         ID = row[0]
         hash = row[1]
         username = row[2]
-        KVS[ID] = {"ID": ID, "hash": hash, "username": username}
+        KVS[username] = {"ID": ID, "hash": hash, "username": username}
     return KVS
 
 
@@ -48,9 +53,9 @@ def get_users():
 (insertUser("!@#", "$2b$12$efdIVEAbQCoXR9Ho3mIPG.BB5G1Q96t7dVUo9wPUXQ5J650lKld9K", "12yrold"))
 (insertUser("stringpw", "$2b$12$efdIVEAbQCoXR9Ho3mIPG.BB5G1Q96t7dVUo9wPUXQ5J650lKld9K", "881321"))
 
-print(get_users())
 
-# print(get_users(1))
+
+
 
 connect.commit()
 connect.close()
@@ -63,4 +68,14 @@ connect.close()
 
 
 
+@app.route('/log_on', methods=['GET'])
+def log_on():
+    info = serverFlask.newPlayer
+    json.loads(info)
+    print(json.loads(info))
 
+
+
+
+# test for addplayer
+# test for remove player with generic circle eating another circle

@@ -7,5 +7,9 @@
   },
   "scripts": {
     "start": "electron ."
+  },
+
+  "scripts": {
+    "test": "jest"
   }
 }
