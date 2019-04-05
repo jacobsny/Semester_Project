@@ -1,14 +1,15 @@
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-    console.log(this.readyState, this.status);
-    if (this.readyState == 4 && this.status == 200) {
-        whyohlordyoupieceofshit = xhttp.responseText;
-        printer(whyohlordyoupieceofshit)
-    }
-};
-xhttp.open("GET", "/newPlayerEndpoint");
-xhttp.send();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            var jacob = why(this.response);
+            printer(jacob)
+
+        }
+    };
+    xhttp.open("GET", "/playerupdate");
+    xhttp.send();
+
 
 function why(x){
     var converted = JSON.parse(x)
@@ -16,6 +17,7 @@ function why(x){
 }
 
 function printer(x){
-    console.log(x)
+    console.log(10)
+    return x
 }
 
