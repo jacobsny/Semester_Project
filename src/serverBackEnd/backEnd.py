@@ -105,7 +105,8 @@ def kill(player):
 #larger of the two gets increased in size that of the other
 #smaller gets killed
 def eat(obj, obj2):
-
+    player1 = players[obj]
+    player2 = players[obj2]
     if player1.size > player2.size:
         kill(player2)
         player1.size += player2.size
@@ -124,7 +125,7 @@ def findIfIntersect(str, str1):
 def checkCollision():
     for user in players:
         for user2 in players:
-            if user != user2 and findIfIntersect(user,user2):
+            if user != user2 and findIfIntersect(user, user2):
                 eat(user, user2)
         for munch in food:
             if findIfIntersect(user,munch):

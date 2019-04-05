@@ -2,7 +2,7 @@ import unittest
 from serverBackEnd.backEnd import newGuy, players, fromJSON,food,Location, eat
 import json
 
-class TestIsRhyme(unittest.TestCase):
+class TestBackEnd(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -28,9 +28,9 @@ class TestIsRhyme(unittest.TestCase):
         players[name0].size += 1
         players[name0].location = Location(1,1)
         players[name1].location = Location(1,1)
-        eat(name0,name1)
-        self.asserttrue(players[name0].size == 11)
-        self.asserttrue(players[name1].killstate)
+        eat(name0, name1)
+        self.assertTrue(players[name0].size == 11)
+        self.assertTrue(players[name1].killState)
 
 
 
