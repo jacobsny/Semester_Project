@@ -1,6 +1,9 @@
 k1 = false;
 k2 = false;
 k3 = false;
+function conversiontohydra(){
+    return[k1,k2,k3]
+}
 function compare(x, y){
     this.dotonex = 420;
     this.dotoney = 120;
@@ -32,7 +35,7 @@ function compare(x, y){
 
 function User(colorpalet, x, y, z, id){
     this.loca = createVector(x, y);
-    this.radius = 2;
+    this.radius = 3;
     this.up = function(){
         var xy = colordetect(colorpalet);
         fill(color(xy));
@@ -41,9 +44,41 @@ function User(colorpalet, x, y, z, id){
         if(compare(this.loca.x, this.loca.y) == true){
             this.radius = this.radius + 10
         }
+        if (k1 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(420, 120, 10, 10);
+        }
+        if (k2 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(120, 420, 10, 10);
+        }
+        if (k3 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(320, 120, 10, 10);
+        }
     }
     this.down = function(){
+        stroke(255, 255, 255)
         var xy = colordetect(colorpalet);
+
+        if (k1 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(420, 120, 10, 10);
+        }
+        if (k2 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(120, 420, 10, 10);
+        }
+        if (k3 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(320, 120, 10, 10);
+        }
         fill(color(xy));
         ellipse(this.loca.x, this.loca.y + 2, this.radius*2, this.radius*2);
         this.loca.y = this.loca.y + 2
@@ -53,31 +88,76 @@ function User(colorpalet, x, y, z, id){
     }
 
     this.left = function(){
+        stroke(255, 255, 255)
         var xy = colordetect(colorpalet);
         fill(color(xy));
         ellipse(this.loca.x-2, this.loca.y, this.radius*2, this.radius*2);
         this.loca.x = this.loca.x - 2
         if(compare(this.loca.x, this.loca.y) == true){
             this.radius = this.radius + 10
+        }if (k1 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(420, 120, 10, 10);
+        }
+        if (k2 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(120, 420, 10, 10);
+        }
+        if (k3 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(320, 120, 10, 10);
         }
 
     }
     this.right = function(){
+        stroke(255, 255, 255)
         var xy = colordetect(colorpalet);
         fill(color(xy));
         ellipse(this.loca.x + 2, this.loca.y, this.radius*2, this.radius*2);
         this.loca.x = this.loca.x + 2
         if(compare(this.loca.x, this.loca.y) == true){
             this.radius = this.radius + 10
+        }if (k1 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(420, 120, 10, 10);
+        }
+        if (k2 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(120, 420, 10, 10);
+        }
+        if (k3 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(320, 120, 10, 10);
         }
 
     }
     this.show = function(){
+        stroke(255, 255, 255)
         var xy = colordetect(colorpalet);
         fill(color(xy));
         ellipse(this.loca.x, this.loca.y, this.radius*2, this.radius*2);
         if(compare(this.loca.x, this.loca.y) == true){
             this.radius = this.radius + 10
+        }if (k1 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(420, 120, 10, 10);
+        }
+        if (k2 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(120, 420, 10, 10);
+        }
+        if (k3 == true){
+            stroke(255, 255, 255)
+            fill(color(255, 255, 255))
+            ellipse(320, 120, 10, 10);
         }
 
     }
