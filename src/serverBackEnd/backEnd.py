@@ -177,7 +177,7 @@ def toJSON(user):
 def invalidRequest():
     json.dumps({"kill": True, "locations": "N/A"})
 
-#is the reciepient of the POST request Stephen will make
+#is the recipient of the POST request Stephen will make
 #first updates the player location
 #then returns the players around if they are a valid player
 def fromJSON(string):
