@@ -55,6 +55,11 @@
             <version>2.6.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.socket</groupId>
+            <artifactId>socket.io-client</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
 
     </dependencies>

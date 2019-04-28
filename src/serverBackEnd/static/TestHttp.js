@@ -1,23 +1,11 @@
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            var jacob = why(this.response);
-            printer(jacob)
-
-        }
-    };
-    xhttp.open("GET", "/playerupdate");
-    xhttp.send();
+socket = io.connect({transports: ['websocket']});
+console.log("hello")
+socket.on('update', parseGameState);
 
 
-function why(x){
-    var converted = JSON.parse(x)
-    return converted
+
+function parseGameState(event) {
+    // console.log(event);
+    const gameState = JSON.parse(event);
+    console.log(gameState)
 }
-
-function printer(x){
-    console.log(10)
-    return x
-}
-
