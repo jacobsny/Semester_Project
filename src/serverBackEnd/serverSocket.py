@@ -54,10 +54,13 @@ def index():
     return send_from_directory('static', 'index.html')
 
 
-@app.route('/game', methods=["POST"])
+@app.route('/game', methods=["POST", "GET"])
 def game():
-    username = request.form.get('username')
-    return render_template("index.html")
+    if request.method == "POST":
+        username = request.form.get('username')
+    else:
+        username = "guest" + str(randint(0, 100000))
+    return render_template('game.html')
 
 
 @app.route('/<path:filename>')
