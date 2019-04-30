@@ -1,6 +1,7 @@
 var killState = false;
 var location = [0,0];
 var speed = 5.0;
+var nameid = "";
 
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var xhttp = new XMLHttpRequest();
@@ -8,6 +9,7 @@ xhttp.onreadystatechange = function () {
     if (this.readyState === 4 && this.status === 200) {
         var parsed = JSON.parse(this.response);
         location = parsed["location"]
+        nameid = parsed["nameid"]
     }
 };
 xhttp.open("GET", "/newPlayerEndpoint");
@@ -72,6 +74,13 @@ while (!killState){
             location[0] += speed;
             console.log("RIGHT")
         }
-    })
+    });
+    var obj = '{'
+        +'"nameid" : '
+        + nameid
+        +'"location" : '
+        + location.toString()
+        +'}';
+    socket.emit('update', obj)
 }
 
