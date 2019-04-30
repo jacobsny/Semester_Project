@@ -126,12 +126,10 @@ def convertToMonitor(user, map):
     originy = userLoc.y - 540
     for i in map:
         temp = map[i]
-        print(temp.location.string())
         xcor = originx - temp.location.x
         ycor = temp.location.y - originy
         temp.location = Location(xcor, ycor)
         string = temp.string()
-        print(temp.location.string())
         map[i] = string
     return map
 
