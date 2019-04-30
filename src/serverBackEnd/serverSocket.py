@@ -60,7 +60,7 @@ def game():
         username = request.form.get('username')
     else:
         username = "guest" + str(randint(0, 100000))
-    return render_template('game.html')
+    return render_template('index.html')
 
 
 @app.route('/<path:filename>')
