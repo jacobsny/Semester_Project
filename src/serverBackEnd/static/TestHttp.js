@@ -38,20 +38,20 @@ function loadVisual(gameStateDict){
 }
 while (!killState){
     document.addEventListener('keydown', function(e){
-        if ((e.key === UP_ARROW)) {
+        if ((e.key === '38')) {
             location[1] += speed;
             console.log("UP")
 
         }
-        if (e.key === DOWN_ARROW) {
+        if (e.key === '40') {
             location[1] -= speed;
             console.log("DOWN")
         }
-        if (e.key === LEFT_ARROW) {
+        if (e.key === '37') {
             location[0] -= speed;
             console.log("LEFT")
         }
-        if (e.key === RIGHT_ARROW) {
+        if (e.key === '39') {
             location[0] += speed;
             console.log("RIGHT")
         }
