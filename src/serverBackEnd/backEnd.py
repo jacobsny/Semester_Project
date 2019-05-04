@@ -1,4 +1,4 @@
-import random
+from random import randint
 import json
 import math
 
@@ -17,18 +17,21 @@ class Location:
         return [self.x, self.y]
 
     def generate(self):
-        self.x = random.randint(-50, 50)
-        self.y = random.randint(-50, 50)
+        self.x = randint(-50, 50)
+        self.y = randint(-50, 50)
 
     def generateFood(self):
-        self.x = random.randint(-300, 300)
-        self.y = random.randint(-300,300)
+        self.x = randint(-300, 300)
+        self.y = randint(-300, 300)
 
+    def string(self):
+        return str([self.x, self.y])
 
-class Player:
-    location = Location(0, 0)
-    size = 5.0
-    killState = False
+class Player(object):
+    def __init__(self):
+        self.location = Location(0, 0)
+        self.size = 5.0
+        self.killState = False
 
     def string(self):
         return "[" + str(self.location.x) + "," + str(self.location.y) + "," + str(self.size) + "]"
@@ -40,33 +43,17 @@ players = {}
 food = {}
 #is called to generate a 4 digit random number to be used in player naming
 def generateName():
-    id1 = random.randint(0, 9)
-    id2 = random.randint(0, 9)
-    id3 = random.randint(0, 9)
-    id4 = random.randint(0, 9)
-    id = str(id1) + str(id2) + str(id3) + str(id4)
-    while str("name" + id) in players:
-        id1 = random.randint(0, 9)
-        id2 = random.randint(0, 9)
-        id3 = random.randint(0, 9)
-        id4 = random.randint(0, 9)
-        id = str(id1) + str(id2) + str(id3) + str(id4)
-    return str("name" + id)
+    id = randint(0, 9999)
+    while str("name" + str(id)) in players:
+        id = randint(0, 9999)
+    return str("name" + str(id))
 
 #is called to generate a 4 digit random number to be used in food naming
 def generateFood():
-    id1 = random.randint(0, 9)
-    id2 = random.randint(0, 9)
-    id3 = random.randint(0, 9)
-    id4 = random.randint(0, 9)
-    id = str(id1) + str(id2) + str(id3) + str(id4)
-    while str("food" + id) in food:
-        id1 = random.randint(0, 9)
-        id2 = random.randint(0, 9)
-        id3 = random.randint(0, 9)
-        id4 = random.randint(0, 9)
-        id = str(id1) + str(id2) + str(id3) + str(id4)
-    return str("food" + id)
+    id = randint(0, 9999)
+    while str("food" + str(id)) in food:
+        id = randint(0, 9999)
+    return str("food" + str(id))
 
 #generates player and returns a new player
 def generatePlayer():
@@ -139,9 +126,9 @@ def convertToMonitor(user, map):
     originy = userLoc.y - 540
     for i in map:
         temp = map[i]
-        x = originx - temp.location.x
-        y = temp.location.y - originy
-        temp.location = Location(x, y)
+        xcor = originx - temp.location.x
+        ycor = temp.location.y - originy
+        temp.location = Location(xcor, ycor)
         string = temp.string()
         map[i] = string
     return map
@@ -177,7 +164,7 @@ def toJSON(user):
 def invalidRequest():
     json.dumps({"kill": True, "locations": "N/A"})
 
-#is the reciepient of the POST request Stephen will make
+#is the recipient of the POST request Stephen will make
 #first updates the player location
 #then returns the players around if they are a valid player
 def fromJSON(string):

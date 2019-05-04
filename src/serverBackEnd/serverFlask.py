@@ -1,6 +1,4 @@
-from flask import Flask, request, send_from_directory, render_template, flash, redirect, session, abort
-import os
-
+from flask import Flask, request, send_from_directory, render_template
 import backEnd
 app = Flask(__name__)
 
@@ -9,7 +7,7 @@ app = Flask(__name__)
 #template based off of some css styling
 @app.route('/')
 def index():
-    return render_template("login.html")
+    return render_template("logon.html")
 
 #game endpoint
 #displays Stephen's html that access' his javascript files
@@ -54,22 +52,7 @@ def newPlayer():
     return jsonResponse
 
 
-@app.route('/')
-def homeScreen():
-    if not session.get("logged_in"):
-        render_template('login.html')
-    else:
-        return "Hello There."
-
-@app.route('/login', methods=['POST'])
-def testLogin():
-    if request.form['password'] == '1234' and request.form['username'] == 'Daniel':
-        session['logged_in'] = True
-    else:
-        flash('Incorrect Password.')
-        return homeScreen()
-
+print(newPlayer())
 
 if __name__ == "__main__":
-    app.secret_key = os.urandom(8)
-    app.run(host='localhost', port=80, debug=True)
+    app.run(host='localhost', port=8080, debug=True)

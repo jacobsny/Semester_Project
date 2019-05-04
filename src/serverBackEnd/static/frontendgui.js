@@ -1,19 +1,25 @@
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+        var jacob = why(this.response);
+        console.log("Connected")
 
-//var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-//var xhttp = new XMLHttpRequest();
-//xhttp.onreadystatechange = function() {
-    //console.log(this.readyState, this.status);
-    //if (this.readyState == 4 && this.status == 200) {
-        //whyohlordyoupieceofshit = xhttp.responseText;
-        //printer(whyohlordyoupieceofshit)
-    //}
-//};
-//xhttp.open("GET", "/newPlayerEndpoint");
-//xhttp.send();
+    }
+};
+xhttp.open("GET", "/playerupdate");
+xhttp.send();
+
+
+function why(x){
+    console.log(10)
+    var converted = JSON.parse(x)
+    return converted
+}
 
 function printer(x){
-    x["location"]
-    console.log(x)
+    console.log(10)
+    return x
 }
 
 function setup(x) {
