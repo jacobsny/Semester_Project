@@ -2,7 +2,7 @@
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Python" name="Python">
-      <configuration sdkName="" />
+      <configuration sdkName="Python 3.7" />
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5">
@@ -54,5 +54,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.github.virtuald:curvesapi:1.04" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: postgresql:postgresql:8.4-701.jdbc3" level="project" />
     <orderEntry type="library" name="scala-sdk-2.12.7" level="application" />
+    <orderEntry type="library" name="Python 3.7 interpreter library" level="application" />
   </component>
 </module>
