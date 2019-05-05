@@ -51,7 +51,7 @@ def updateShit(data):
 
 @app.route('/')
 def index():
-    return send_from_directory('static', 'index.html')
+    return send_from_directory('templates', 'login.html')
 
 
 @app.route('/game', methods=["POST", "GET"])
