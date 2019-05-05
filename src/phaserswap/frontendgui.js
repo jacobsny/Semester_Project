@@ -1,9 +1,6 @@
-socket = io.connect("http://localhost:12345")
+var templists = [[420, 120], [120, 420], [420, 120], [20, 470], [320, 120], [120, 270]]
 
-var user = new themcircles("This_will_have_a_json_in_part_two_from_backend"); //edited
-var circles = new User("red", startx, starty, zed. ided); //edited
 function setup() {
-
     var aspectx =920
     var aspecty = 680
     var zed = 23
@@ -11,17 +8,15 @@ function setup() {
     createCanvas(aspectx, aspecty);
     var startx = 400
     var starty = 400
-    circles = new themcircles("This_will_have_a_json_in_part_two_from_backend")
-    user = new User("red", startx, starty, zed. ided);
-
+    user = new User("red", 0, 0, 0);
 }
 
 
 function draw() {
+    circles = new themcircles("This_will_have_a_json_in_part_two_from_backend")
     background(255,255,255)
-    circles.minidot();
+    circles.minidot(templists);
     keyisPress();
-
 
 }
 function keyisPress(){
