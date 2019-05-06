@@ -17,13 +17,16 @@ socket_server = SocketIO(app)
 usernameToSid = {}
 sidToUsername = {}
 
-
+#endpoint called that will create a new player when a person logs on
 @socket_server.on('register')
 def got_message(username):
     usernameToSid[username] = request.sid
     sidToUsername[request.sid] = username
     print(username + " connected")
-    message = {"username": username, "action": "connected"}
+    response = backEnd.newGuy()
+    user_socket = usernameToSid.get(username, None)
+    if user_socket:
+        socket_server.emit('register', response, room=user_socket)
 
 
 @socket_server.on('disconnect')
@@ -35,7 +38,10 @@ def got_connection():
         print(username + " disconnected")
         message = {"username": username, "action": "disconnected"}
 
-
+#post endpoint that will be called by Stephen using a json body
+#body contains player id and location of player
+#output will be a map for the player on where all other players and food are
+#while also telling the player whether they are dead or not or if they have increased in size
 @socket_server.on('update')
 def updateShit(data):
     #data is array [x,y]
@@ -58,27 +64,13 @@ def game():
         username = request.form.get('username')
     else:
         username = "guest" + str(randint(0, 100000))
-    return render_template('index.html')
+    return render_template('index.html', username=username)
 
 
 @app.route('/<path:filename>')
 def static_files(filename):
     return send_from_directory('static', filename)
-#post endpoint that will be called by Stephen using a json body
-#body contains player id and location of player
-#output will be a map for the player on where all other players and food are
-#while also telling the player whether they are dead or not or if they have increased in size
-@app.route('/playerupdate', methods=['POST'])
-def update():
-    postdata = request.body.read()
-    response = backEnd.fromJSON(postdata)
-    return response
 
-#endpoint called that will create a new player when a person logs on
-@app.route('/newPlayerEndpoint', methods=['GET'])
-def newPlayer():
-    jsonResponse = backEnd.newGuy()
-    return jsonResponse
 
 
 print("Python Server Running")

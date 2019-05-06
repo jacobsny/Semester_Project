@@ -1,39 +1,52 @@
-var killState = false;
-var location = [0,0];
-var speed = 5.0;
-var nameid = "";
 var FrontEndFood = [];
 var FrontEndplayers = [];
-var color = "cyan"
-var Playersize = 50
+var color = "cyan";
+var Playersize = 50;
 
 
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-        var parsed = JSON.parse(this.response);
-        location = parsed["location"]
-        nameid = parsed["nameid"]
-    }
-};
-xhttp.open("GET", "/newPlayerEndpoint");
-xhttp.send();
+var killState = false;
+var speed = 5.0;
+var location =[0,0];
+var nameid = "";
 
 
 socket = io.connect({transports: ['websocket']});
 
 setupSocket();
 
-function convertingfromJson(parsed){
+function setupSocket() {
+    socket.on('connect', function (event) {
+        socket.send('Hello Server!');
+    });
+    socket.on('message', function (event) {
+        // console.log(event);
+        const gameState = JSON.parse(event);
+        console.log(gameState + "front");
+        convertingFromJson(gameState)
+
+    });
+    socket.on('register', function (event) {
+        // console.log(event);
+        const initialize = JSON.parse(event);
+        location = initialize["location"];
+        nameid = initialize["nameid"];
+
+    });
+}
+function initializeGame(inputUsername) {
+    username = inputUsername;
+    socket.emit("register", username);
+}
+
+function convertingFromJson(parsed){
     for (var ind of parsed){
-        if(ind == "locations"){
-            for (var playorfood of ind){
-                if(playorfood[0] === "f" || playorfood[0] === 'f' || playorfood.contains("food")){
-                    FrontEndFood.push(ind[playorfood])
+        if(ind === "locations"){
+            for (var playerFood of ind){
+                if(playerFood[0] === "f" || playerFood[0] === 'f' || playerFood.contains("food")){
+                    FrontEndFood.push(ind[playerFood])
                 }
                 else{
-                    FrontEndplayers.push(ind[playorfood])
+                    FrontEndplayers.push(ind[playerFood])
                 }
             }
         }
@@ -45,48 +58,35 @@ function loadVisual(gameStateDict){
     //set up everything for visual
 }
 
-function setupSocket() {
-    socket.on('connect', function (event) {
-        socket.send('Hello Server!');
-    });
-    socket.on('message', function (event) {
-        // console.log(event);
-        const gameState = JSON.parse(event);
-        console.log(gameState + "front");
-        convertingfromJson(gameState)
-
-    });
-}
-
 
 function setup() {
-    var aspectx = 900
-    var aspecty = 900
-    createCanvas(aspectx, aspecty);
-    if (killState == false) {
+    var aspectX = 900;
+    var aspectY = 900;
+    createCanvas(aspectX, aspectY);
+    if (killState === false) {
         user = new User(color);
     }
 }
 
 function draw(){
-    user.show(location[0], location[1], location[2])
-    background(255,255,255)
-    createfood(FrontEndFood);
+    user.show(location[0], location[1], location[2]);
+    background(255,255,255);
+    createFood(FrontEndFood);
     otherplayers(FrontEndplayers)
 }
 
-function createfood(placeholder){
+function createFood(placeholder){
         for (var ind in placeholder) {
-            fill(color(122, 0, 122))
-            var i = placeholder[ind]
+            fill(color(122, 0, 122));
+            var i = placeholder[ind];
             ellipse(i[0], i[1], i[2], i[2]);
             //console.log(ind[0])//
         }
     }
     function otherplayers(placeholder){
         for (var ind in placeholder) {
-            fill(color(22, 33, 122))
-            var i = placeholder[ind]
+            fill(color(22, 33, 122));
+            var i = placeholder[ind];
             ellipse(i[0], i[1], i[2], i[2]);
             //console.log(ind[0])//
         }
