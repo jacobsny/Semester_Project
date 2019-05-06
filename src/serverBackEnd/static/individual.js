@@ -1,4 +1,3 @@
-
 function User(colorpalet) {
     this.show = function (x, y, size) {
         stroke(255, 255, 255)

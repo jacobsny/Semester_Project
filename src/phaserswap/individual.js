@@ -1,4 +1,4 @@
-function User(colorpalet, x, y, z, id){
+function User(colorpalet, x, y){
     this.pos = createVector(x, y);
     this.radius = 64;
     this.up = function(){

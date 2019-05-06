@@ -2,9 +2,11 @@ var killState = false;
 var location = [0,0];
 var speed = 5.0;
 var nameid = "";
-var Food = [];
-var Players = [];
+var FrontEndFood = [];
+var FrontEndplayers = [];
 var color = "cyan"
+var Playersize = 50
+
 
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var xhttp = new XMLHttpRequest();
@@ -13,46 +15,29 @@ xhttp.onreadystatechange = function () {
         var parsed = JSON.parse(this.response);
         location = parsed["location"]
         nameid = parsed["nameid"]
-        convertingfromJson(this.response)
     }
 };
 xhttp.open("GET", "/newPlayerEndpoint");
 xhttp.send();
+
 
 socket = io.connect({transports: ['websocket']});
 
 setupSocket();
 
 function convertingfromJson(parsed){
-    var parsed = JSON.parse(x);
-    var players = {};
-    var food = [];
-    var players = {};
-    var food = [];
     for (var ind of parsed){
-        if (ind == "kill"){
-            if (ind["kill"] == false){
-                killState = false
-            }
-            else if(ind["kill"] == "False"){
-                killState = false
-            }
-            else{
-                killState = true
-            }
-        }
-        else if(ind == "locations"){
+        if(ind == "locations"){
             for (var playorfood of ind){
-                if(playorfood[0] === "f" || playorfood[0] === 'f'){
-                    food.push(ind[playorfood])
+                if(playorfood[0] === "f" || playorfood[0] === 'f' || playorfood.contains("food")){
+                    FrontEndFood.push(ind[playorfood])
                 }
                 else{
-                    players.push(ind[playorfood])
+                    FrontEndplayers.push(ind[playorfood])
                 }
             }
         }
     }
-    return [food, players]
 }
 
 function loadVisual(gameStateDict){
@@ -67,8 +52,9 @@ function setupSocket() {
     socket.on('message', function (event) {
         // console.log(event);
         const gameState = JSON.parse(event);
-        console.log(gameState);
-        loadVisual(gameState);
+        console.log(gameState + "front");
+        convertingfromJson(gameState)
+
     });
 }
 
@@ -77,20 +63,35 @@ function setup() {
     var aspectx = 900
     var aspecty = 900
     createCanvas(aspectx, aspecty);
-    var x = aspectx/2
-    var y = aspecty/2
-    circles = new themcircles()
     if (killState == false) {
         user = new User(color);
     }
 }
 
-function draw() {
+function draw(){
+    user.show(location[0], location[1], location[2])
     background(255,255,255)
-    circles.minidot(Food);
-    circles.otherplayers(Players)
-    user.show(location[0], location [1], 30)
+    createfood(FrontEndFood);
+    otherplayers(FrontEndplayers)
 }
+
+function createfood(placeholder){
+        for (var ind in placeholder) {
+            fill(color(122, 0, 122))
+            var i = placeholder[ind]
+            ellipse(i[0], i[1], i[2], i[2]);
+            //console.log(ind[0])//
+        }
+    }
+    function otherplayers(placeholder){
+        for (var ind in placeholder) {
+            fill(color(22, 33, 122))
+            var i = placeholder[ind]
+            ellipse(i[0], i[1], i[2], i[2]);
+            //console.log(ind[0])//
+        }
+    }
+
 
 while (!killState){
     document.addEventListener('keydown', function(e){
@@ -138,21 +139,3 @@ while (!killState){
     socket.emit('update', obj)
 }
 
-//
-// function keyisPress(){
-//     if ((keyCode === UP_ARROW)) {
-//         user.up()
-//     }
-//     if (keyCode === DOWN_ARROW) {
-//         user.down()
-//     }
-//     if (keyCode === LEFT_ARROW) {
-//         user.left()
-//     }
-//     if (keyCode === RIGHT_ARROW) {
-//         user.right()
-//     }
-//     else {
-//         user.show();
-//     }
-// }
