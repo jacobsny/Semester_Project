@@ -1,6 +1,7 @@
 import json
 import socket
 from threading import Thread
+from serverBackEnd import backEnd
 from random import randint
 
 from flask import Flask, send_from_directory, request, render_template
@@ -15,8 +16,6 @@ socket_server = SocketIO(app)
 
 usernameToSid = {}
 sidToUsername = {}
-
-
 
 
 @socket_server.on('register')
@@ -35,7 +34,6 @@ def got_connection():
         del usernameToSid[username]
         print(username + " disconnected")
         message = {"username": username, "action": "disconnected"}
-
 
 
 @socket_server.on('update')
