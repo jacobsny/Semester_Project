@@ -27,7 +27,7 @@ function setupSocket() {
         convertingFromJson(gameState)
 
     });
-    socket.on('register', function (event) {
+    socket.on('initialize', function (event) {
         // console.log(event);
         const initialize = JSON.parse(event);
         location = initialize["location"];
@@ -95,7 +95,7 @@ function createFood(placeholder){
     }
 
 
-/*while (!killState){
+while (!killState){
     document.addEventListener('keydown', function(e){
         if ((e.key === '38')) {
             location[1] += speed;
@@ -139,5 +139,5 @@ function createFood(placeholder){
         + location.toString()
         +'}';
     socket.emit('update', obj)
-}*/
+}
 

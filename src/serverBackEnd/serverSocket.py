@@ -1,7 +1,6 @@
 import json
 import socket
 from threading import Thread
-from serverBackEnd import backEnd
 from random import randint
 
 from flask import Flask, send_from_directory, request, render_template
@@ -9,10 +8,14 @@ from flask_socketio import SocketIO
 
 import eventlet
 
+from serverBackEnd import backEnd
+
 eventlet.monkey_patch()
 
 app = Flask(__name__)
 socket_server = SocketIO(app)
+
+backEndCode = backEnd.BackEnd()
 
 usernameToSid = {}
 sidToUsername = {}
@@ -23,10 +26,10 @@ def got_message(username):
     usernameToSid[username] = request.sid
     sidToUsername[request.sid] = username
     print(username + " connected")
-    response = backEnd.newGuy()
+    response = backEndCode.newGuy()
     user_socket = usernameToSid.get(username, None)
     if user_socket:
-        socket_server.emit('register', response, room=user_socket)
+        socket_server.emit('initialize', response, room=user_socket)
 
 
 @socket_server.on('disconnect')
@@ -36,7 +39,6 @@ def got_connection():
         del sidToUsername[request.sid]
         del usernameToSid[username]
         print(username + " disconnected")
-        message = {"username": username, "action": "disconnected"}
 
 #post endpoint that will be called by Stephen using a json body
 #body contains player id and location of player
@@ -47,7 +49,7 @@ def updateShit(data):
     #data is array [x,y]
     username = sidToUsername[request.sid]
     message = {"nameid": username, "location": json.loads(data)}
-    response = backEnd.fromJSON(message)
+    response = backEndCode.fromJSON(message)
     user_socket = usernameToSid.get(username, None)
     if user_socket:
         socket_server.emit('message', response, room=user_socket)
