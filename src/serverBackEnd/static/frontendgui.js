@@ -7,9 +7,9 @@ var color = "cyan";
 
 var killState = false;
 var speed = 5.0;
-var location =[0,0];
+var loc =[0,0];
 var nameid = "";
-var username = ""
+var username = "";
 
 var socket = io.connect({transports: ['websocket']});
 
@@ -29,7 +29,7 @@ function setupSocket() {
         console.log("received initialize");
         var initialize = JSON.parse(event);
         console.log(initialize);
-        location = initialize["location"];
+        loc = initialize["location"];
         nameid = initialize["nameid"];
     });
 }
@@ -53,7 +53,7 @@ function convertingFromJson(parsed){
         }
     }
 }
-/*
+
 function loadVisual(gameStateDict){
     killState = gameStateDict["kill"]
     //set up everything for visual
@@ -70,7 +70,7 @@ function setup() {
 }
 
 function draw(){
-    user.show(location[0], location[1], location[2]);
+    user.show(loc[0], loc[1], loc[2]);
     background(255,255,255);
     createFood(FrontEndFood);
     otherplayers(FrontEndplayers)
@@ -97,37 +97,37 @@ function createFood(placeholder){
 while (!killState){
     document.addEventListener('keydown', function(e){
         if ((e.key === '38')) {
-            location[1] += speed;
+            loc[1] += speed;
             socket.emit('print',"UP")
 
         }
         if (e.key === '40') {
-            location[1] -= speed;
+            loc[1] -= speed;
             socket.emit('print',"DOWN")
         }
         if (e.key === '37') {
-            location[0] -= speed;
+            loc[0] -= speed;
             socket.emit('print',"LEFT")
         }
         if (e.key === '39') {
-            location[0] += speed;
+            loc[0] += speed;
             socket.emit('print',"RIGHT")
         }
         if ((e.key === 'w')) {
-            location[1] += speed;
+            loc[1] += speed;
             socket.emit('print',"UP")
 
         }
         if (e.key === 's') {
-            location[1] -= speed;
+            loc[1] -= speed;
             socket.emit('print',"DOWN")
         }
         if (e.key === 'a') {
-            location[0] -= speed;
+            loc[0] -= speed;
             socket.emit('print',"LEFT")
         }
         if (e.key === 'd') {
-            location[0] += speed;
+            loc[0] += speed;
             socket.emit('print',"RIGHT")
         }
     });
@@ -135,8 +135,8 @@ while (!killState){
         +'"nameid" : '
         + nameid
         +'"location" : '
-        + location.toString()
+        + loc.toString()
         +'}';
     socket.emit('update', obj)
-}*/
+}
 

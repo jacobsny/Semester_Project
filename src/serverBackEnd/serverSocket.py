@@ -48,6 +48,7 @@ def got_connection():
 #while also telling the player whether they are dead or not or if they have increased in size
 @socket_server.on('update')
 def updateShit(data):
+    print("update Called")
     #data is array [x,y]
     username = sidToUsername[request.sid]
     message = {"nameid": username, "location": json.loads(data)}
