@@ -9,7 +9,7 @@ var killState = false;
 var speed = 5.0;
 var location =[0,0];
 var nameid = "";
-
+var username = ""
 
 var socket = io.connect({transports: ['websocket']});
 
