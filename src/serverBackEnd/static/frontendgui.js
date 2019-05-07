@@ -1,7 +1,8 @@
+//const io = require("socket.io-client");
+
 var FrontEndFood = [];
 var FrontEndplayers = [];
 var color = "cyan";
-var Playersize = 50;
 
 
 var killState = false;
@@ -10,51 +11,49 @@ var location =[0,0];
 var nameid = "";
 
 
-socket = io.connect({transports: ['websocket']});
-
-socket.emit('print', "openedGame");
+var socket = io.connect({transports: ['websocket']});
 
 setupSocket();
 
+console.log("openedGame");
 function setupSocket() {
-    socket.on('connect', function (event) {
-        socket.send('Hello Server!');
-    });
-    socket.on('message', function (event) {
-        // console.log(event);
-        const gameState = JSON.parse(event);
-        socket.emit('print', gameState + "front");
+
+    socket.on('message', (event) => {
+        console.log("received message");
+        var gameState = JSON.parse(event);
+        console.log(gameState);
         convertingFromJson(gameState)
 
     });
-    socket.on('initialize', function (event) {
-        // console.log(event);
-        const initialize = JSON.parse(event);
+    socket.on('initialize', (event)=> {
+        console.log("received initialize");
+        var initialize = JSON.parse(event);
+        console.log(initialize);
         location = initialize["location"];
         nameid = initialize["nameid"];
-
     });
 }
+
+
 function initializeGame(inputUsername) {
     username = inputUsername;
+    console.log("Sending Register");
     socket.emit("register", username);
 }
 
 function convertingFromJson(parsed){
-    for (var ind of parsed){
-        if(ind === "locations"){
-            for (var playerFood of ind){
-                if(playerFood[0] === "f" || playerFood[0] === 'f' || playerFood.contains("food")){
-                    FrontEndFood.push(ind[playerFood])
-                }
-                else{
-                    FrontEndplayers.push(ind[playerFood])
-                }
-            }
+    killState = parsed["kill"];
+    var locations = parsed["locations"];
+    for (var playerFood of locations){
+        if(playerFood[0] === "f" || playerFood[0] === 'f' || playerFood.contains("food")){
+            FrontEndFood.push(locations[playerFood])
+        }
+        else{
+            FrontEndplayers.push(locations[playerFood])
         }
     }
 }
-
+/*
 function loadVisual(gameStateDict){
     killState = gameStateDict["kill"]
     //set up everything for visual
@@ -139,5 +138,5 @@ while (!killState){
         + location.toString()
         +'}';
     socket.emit('update', obj)
-}
+}*/
 

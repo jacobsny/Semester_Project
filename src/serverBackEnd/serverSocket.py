@@ -1,16 +1,12 @@
 import json
-import socket
-from threading import Thread
 from random import randint
 
 from flask import Flask, send_from_directory, request, render_template
 from flask_socketio import SocketIO
 
-import eventlet
 
 from serverBackEnd import backEnd
 
-eventlet.monkey_patch()
 
 app = Flask(__name__)
 socket_server = SocketIO(app)
@@ -20,16 +16,22 @@ backEndCode = backEnd.BackEnd()
 usernameToSid = {}
 sidToUsername = {}
 
+
+def send_to_js(username, type, data):
+    user_socket = usernameToSid.get(username,None)
+    if user_socket:
+        socket_server.emit(type, data, room=user_socket)
+
+
 #endpoint called that will create a new player when a person logs on
 @socket_server.on('register')
 def got_message(username):
     usernameToSid[username] = request.sid
     sidToUsername[request.sid] = username
-    print(username + " connected")
+    print(username + " connected at: " + request.sid)
     response = backEndCode.newGuy()
-    user_socket = usernameToSid.get(username, None)
-    if user_socket:
-        socket_server.emit('initialize', response, room=user_socket)
+    print("sending message to: " + request.sid)
+    send_to_js(username, 'initialize', response)
 
 
 @socket_server.on('disconnect')
@@ -50,9 +52,7 @@ def updateShit(data):
     username = sidToUsername[request.sid]
     message = {"nameid": username, "location": json.loads(data)}
     response = backEndCode.fromJSON(message)
-    user_socket = usernameToSid.get(username, None)
-    if user_socket:
-        socket_server.emit('message', response, room=user_socket)
+    send_to_js(username, 'message', response)
 
 
 @socket_server.on('print')
@@ -78,6 +78,11 @@ def game():
 def static_files(filename):
     return send_from_directory('static', filename)
 
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
 
 print("Python Server Running")
 socket_server.run(app, port=8080, debug=True)

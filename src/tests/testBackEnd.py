@@ -1,5 +1,5 @@
 import unittest
-from serverBackEnd.backEnd import newGuy, players, fromJSON,food,Location, eat
+from serverBackEnd import backEnd
 import json
 
 class TestBackEnd(unittest.TestCase):
@@ -8,29 +8,32 @@ class TestBackEnd(unittest.TestCase):
         pass
 
     def test_creation_player(self):
-        response = json.loads(newGuy())
+        backEndCode = backEnd.BackEnd()
+        response = json.loads(backEndCode.newGuy())
         name = response["nameid"]
         location = response["location"]
         self.assertTrue(name[:4] == "name" and len(location) == 2)
-        self.assertTrue(players[name].location.x == location[0] and players[name].location.y == location[1])
-        newGuy()
-        newGuy()
-        newGuy()
-        newGuy()
-        response2 = json.loads(fromJSON(json.dumps(response)))
+        self.assertTrue(backEndCode.players[name].location.x == location[0] and
+                        backEndCode.players[name].location.y == location[1])
+        backEndCode.newGuy()
+        backEndCode.newGuy()
+        backEndCode.newGuy()
+        backEndCode.newGuy()
+        response2 = json.loads(backEndCode.fromJSON(json.dumps(response)))
         print(response2)
 
     def testEat(self):
-        response0 = json.loads(newGuy())
+        backEndCode = backEnd.BackEnd()
+        response0 = json.loads(backEndCode.newGuy())
         name0 = response0["nameid"]
-        response1 = json.loads(newGuy())
+        response1 = json.loads(backEndCode.newGuy())
         name1 = response1["nameid"]
-        players[name0].size += 1
-        players[name0].location = Location(1,1)
-        players[name1].location = Location(1,1)
-        eat(name0, name1)
-        self.assertTrue(players[name0].size == 11)
-        self.assertTrue(players[name1].killState)
+        backEndCode.players[name0].size += 1
+        backEndCode.players[name0].location = backEnd.Location(1,1)
+        backEndCode.players[name1].location = backEnd.Location(1,1)
+        backEndCode.eat(name0, name1)
+        self.assertTrue(backEndCode.players[name0].size == 11)
+        self.assertTrue(backEndCode.players[name1].killState)
 
 
 
