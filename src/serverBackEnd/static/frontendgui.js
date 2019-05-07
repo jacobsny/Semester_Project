@@ -12,6 +12,8 @@ var nameid = "";
 
 socket = io.connect({transports: ['websocket']});
 
+socket.emit('print', "openedGame");
+
 setupSocket();
 
 function setupSocket() {
@@ -21,7 +23,7 @@ function setupSocket() {
     socket.on('message', function (event) {
         // console.log(event);
         const gameState = JSON.parse(event);
-        console.log(gameState + "front");
+        socket.emit('print', gameState + "front");
         convertingFromJson(gameState)
 
     });
@@ -93,41 +95,41 @@ function createFood(placeholder){
     }
 
 
-while (!killState){
+/*while (!killState){
     document.addEventListener('keydown', function(e){
         if ((e.key === '38')) {
             location[1] += speed;
-            console.log("UP")
+            socket.emit('print',"UP")
 
         }
         if (e.key === '40') {
             location[1] -= speed;
-            console.log("DOWN")
+            socket.emit('print',"DOWN")
         }
         if (e.key === '37') {
             location[0] -= speed;
-            console.log("LEFT")
+            socket.emit('print',"LEFT")
         }
         if (e.key === '39') {
             location[0] += speed;
-            console.log("RIGHT")
+            socket.emit('print',"RIGHT")
         }
         if ((e.key === 'w')) {
             location[1] += speed;
-            console.log("UP")
+            socket.emit('print',"UP")
 
         }
         if (e.key === 's') {
             location[1] -= speed;
-            console.log("DOWN")
+            socket.emit('print',"DOWN")
         }
         if (e.key === 'a') {
             location[0] -= speed;
-            console.log("LEFT")
+            socket.emit('print',"LEFT")
         }
         if (e.key === 'd') {
             location[0] += speed;
-            console.log("RIGHT")
+            socket.emit('print',"RIGHT")
         }
     });
     var obj = '{'
@@ -137,5 +139,5 @@ while (!killState){
         + location.toString()
         +'}';
     socket.emit('update', obj)
-}
+}*/
 

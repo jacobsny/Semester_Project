@@ -53,6 +53,11 @@ def updateShit(data):
         socket_server.emit('message', response, room=user_socket)
 
 
+@socket_server.on('print')
+def printShit(data):
+    print(data)
+
+
 @app.route('/')
 def index():
     return send_from_directory('templates', 'login.html')
@@ -70,7 +75,6 @@ def game():
 @app.route('/<path:filename>')
 def static_files(filename):
     return send_from_directory('static', filename)
-
 
 
 print("Python Server Running")
