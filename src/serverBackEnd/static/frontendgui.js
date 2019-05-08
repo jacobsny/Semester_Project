@@ -50,7 +50,7 @@ function User(colorpalet, xer, yer) {
     stroke(255, 255, 255);
     var xy = colordetect("green");
     fill(color(xy));
-    ellipse(xer, yer, 20 * 2, 20 * 2);
+    ellipse(xer, yer, 20, 20);
 }
 
 
@@ -105,16 +105,16 @@ function draw(){
 
 function createFood(placeholder){
     for (var ind in placeholder) {
-        fill(color(122, 0, 122));
+        fill(color(0, 0, 255));
         var i = placeholder[ind];
-        ellipse(i[0], i[1], i[2], i[2]);
+        ellipse(i[0], i[1], 10 + i[2], 10 + i[2]);
         //console.log(ind[0])//
     }
 }
 
 function otherplayers(placeholder){
     for (var ind in placeholder) {
-        fill(color(122, 0, 122));
+        fill(color(122, 122, 0));but
         var i = placeholder[ind];
         ellipse(i[0], i[1], i[2], i[2]);
         //console.log(ind[0])//
