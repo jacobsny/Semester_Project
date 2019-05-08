@@ -37,8 +37,8 @@ class Player(object):
 
     def string(self):
         return [self.location.x, self.location.y, self.size]
-#future map holding all players
-#future map holding all food
+    #future map holding all players
+    #future map holding all food
 
     def up(self):
         self.location.y += 1
