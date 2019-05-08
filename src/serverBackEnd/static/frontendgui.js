@@ -22,7 +22,6 @@ socket.on('message', (event) => {
     var action = gameState["action"];
     gameState = JSON.parse(gameState["message"]);
     if (action === 'message'){
-        console.log(gameState["kill"]);
         convertingFromJson(gameState)
     }
     else if (action === 'init'){
@@ -51,8 +50,7 @@ function User(colorpalet, xer, yer) {
     stroke(255, 255, 255);
     var xy = colordetect("green");
     fill(color(xy));
-    console.log("HI")
-    ellipse(50, 50, 20 * 2, 20 * 2);
+    ellipse(xer, yer, 20 * 2, 20 * 2);
 }
 
 
@@ -88,8 +86,6 @@ function convertingFromJson(parsed){
             FrontEndplayers.push(locations[playerFood])
         }
     }
-    console.log(FrontEndFood);
-    console.log(FrontEndplayers);
 }
 
 
@@ -129,30 +125,39 @@ function keyisPress(){
     var obj = {};
     if ((keyCode === UP_ARROW)) {
         obj = {};
+        loc[1] -= speed;
+        User("cyan", loc[0], loc[1])
         obj.nameid = nameid;
         obj.keyPress = 'UP';
         socket.emit('controller', JSON.stringify(obj))
     }
     else if (keyCode === DOWN_ARROW) {
         obj = {};
+        loc[1] += speed;
+        User("cyan", loc[0], loc[1])
         obj.nameid = nameid;
         obj.keyPress = 'DOWN';
         socket.emit('controller', JSON.stringify(obj))
     }
     else if (keyCode === LEFT_ARROW) {
         obj = {};
+        loc[0] -= speed;
+        User("cyan", loc[0], loc[1])
         obj.nameid = nameid;
         obj.keyPress = 'LEFT';
         socket.emit('controller', JSON.stringify(obj))
     }
     else if (keyCode === RIGHT_ARROW) {
         obj = {};
+        loc[0] += speed;
+        User("cyan", loc[0], loc[1])
         obj.nameid = nameid;
         obj.keyPress = 'LEFT';
         socket.emit('controller', JSON.stringify(obj))
     }
     else {
         if (!killState){
+            User("cyan", loc[0], loc[1])
             socket.emit('update', createObject());
         }
     }

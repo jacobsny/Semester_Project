@@ -1,4 +1,3 @@
-
 var FrontEndFood = [];
 var FrontEndplayers = [];
 var color = "cyan";
@@ -6,7 +5,7 @@ var color = "cyan";
 
 var killState = false;
 var speed = 5.0;
-var loc =[0,0];
+var loc =[0, 0, 0];
 var nameid = "";
 var username = "";
 
