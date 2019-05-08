@@ -40,6 +40,18 @@ class Player(object):
 #future map holding all players
 #future map holding all food
 
+    def up(self):
+        self.location.y += 1
+
+    def down(self):
+        self.location.y -= 1
+
+    def left(self):
+        self.location.x -= 1
+
+    def right(self):
+        self.location.x += 1
+
 
 class BackEnd:
     def __init__(self):
@@ -144,20 +156,9 @@ class BackEnd:
     #and the value in the locations map is an array of (x,y,size)
     #x and y are in terms of monitor coordinates not world coordinates
     def toJSON(self, user):
-        player = self.players[user]
-        xLower = player.location.x - 960
-        xUpper = player.location.x + 960
-        yLower = player.location.y - 540
-        yUpper = player.location.y + 540
         proximity = {}
-        for users in self.players:
-            loc = self.players[users].location
-            proximity.update({users: self.players[users]})
-            #proximity[users] = players[users]
-        for munch in self.food:
-            loc = self.players[munch].location
-            proximity.update({munch: self.food[munch]})
-            #proximity[munch] = food[munch]
+        proximity.update(self.players)
+        proximity.update(self.food)
         proximity = self.convertToMonitor(user, proximity)
         kill = self.players[user].killState
         jsonMap = {"kill": kill, "locations": proximity}

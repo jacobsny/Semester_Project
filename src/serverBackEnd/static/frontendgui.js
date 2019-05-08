@@ -3,7 +3,7 @@ var FrontEndplayers = [];
 var colorer = "cyan";
 var killState = false;
 var speed = 5.0;
-var loc =[0,0,0];
+var loc =[0,0];
 var nameid = "";
 var username = "";
 
@@ -47,11 +47,12 @@ socket.on('connect', ()=> {
 function initializeGame(inputUsername) {
     username = inputUsername;
 }
-function User(colorpalet, x, y, size) {
-        stroke(255, 255, 255);
-        var xy = colordetect(colorpalet);
-        fill(color(xy));
-        ellipse(x, y, size * 2, size * 2);
+function User(colorpalet, xer, yer) {
+    stroke(255, 255, 255);
+    var xy = colordetect("green");
+    fill(color(xy));
+    console.log("HI")
+    ellipse(50, 50, 20 * 2, 20 * 2);
 }
 
 
@@ -78,9 +79,7 @@ function colordetect(colorpalet){
 }
 
 function convertingFromJson(parsed){
-    killState = parsed["kill"];
     var locations = parsed["locations"];
-    socket.emit('print', killState);
     for (var playerFood in locations){
         if(playerFood.substring(0,4) === "food"){
             FrontEndFood.push(locations[playerFood])
@@ -102,12 +101,8 @@ function setup() {
 }
 
 function draw(){
-    //console.log(FrontEndFood)
-    //console.log(FrontEndplayers)
     background(255,255,255);
-    // fill(color(122, 0, 122));
-    // ellipse(10, 10, 60, 60);
-    User(colorer, loc[0], loc[1], loc[2]);
+    keyisPress();
     createFood(FrontEndFood);
     otherplayers(FrontEndplayers);
 }
@@ -130,34 +125,38 @@ function otherplayers(placeholder){
     }
 }
 
-
-document.addEventListener('keydown', function(e){
-    if ((e.key === '38') || (e.key === 'w')) {
-        loc[1] += speed;
-        socket.emit('print',JSON.stringify("UP"));
-
-
+function keyisPress(){
+    var obj = {};
+    if ((keyCode === UP_ARROW)) {
+        obj = {};
+        obj.nameid = nameid;
+        obj.keyPress = 'UP';
+        socket.emit('controller', JSON.stringify(obj))
     }
-    if (e.key === '40' || (e.key === 's')) {
-        loc[1] -= speed;
-        socket.emit('print',JSON.stringify("DOWN"));
-
+    else if (keyCode === DOWN_ARROW) {
+        obj = {};
+        obj.nameid = nameid;
+        obj.keyPress = 'DOWN';
+        socket.emit('controller', JSON.stringify(obj))
     }
-    if (e.key === '37' || (e.key === 'a')) {
-        loc[0] -= speed;
-        socket.emit('print',JSON.stringify("LEFT"));
-
+    else if (keyCode === LEFT_ARROW) {
+        obj = {};
+        obj.nameid = nameid;
+        obj.keyPress = 'LEFT';
+        socket.emit('controller', JSON.stringify(obj))
     }
-    if (e.key === '39' || (e.key === 'd')) {
-        loc[0] += speed;
-        socket.emit('print',JSON.stringify("RIGHT"));
-
+    else if (keyCode === RIGHT_ARROW) {
+        obj = {};
+        obj.nameid = nameid;
+        obj.keyPress = 'LEFT';
+        socket.emit('controller', JSON.stringify(obj))
     }
     else {
         if (!killState){
             socket.emit('update', createObject());
         }
     }
-});
+}
+
 
 

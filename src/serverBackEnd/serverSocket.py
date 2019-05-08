@@ -40,6 +40,22 @@ def got_message(username):
     emit('message', response)
 
 
+@socket_server.on('controller')
+def controller(data):
+    data = json.loads(data)
+    nameID = data['nameid']
+    if nameID  in backEndCode.players:
+        action = data['keyPress']
+        if action == 'UP':
+            backEndCode.players[nameID].up()
+        if action == 'DOWN':
+            backEndCode.players[nameID].down()
+        if action == 'LEFT':
+            backEndCode.players[nameID].left()
+        if action == 'RIGHT':
+            backEndCode.players[nameID].right()
+
+
 @socket_server.on('disconnect')
 def got_connection():
     if request.sid in sidToUsername:
@@ -55,13 +71,13 @@ def got_connection():
 @socket_server.on('update')
 def updateShit(data):
     data = json.loads(data)
-    print(data)
     nameOfPlayer = data["nameid"]
     loc = data["location"]
-    print(nameOfPlayer,loc)
-    response = backEndCode.fromJSON(nameOfPlayer, loc)
-    response = json.dumps(sendMessage('message', response))
-    emit('message', response)
+    if nameOfPlayer in backEndCode.players:
+        print(backEndCode.players[nameOfPlayer].location.string())
+        response = backEndCode.fromJSON(nameOfPlayer, loc)
+        response = json.dumps(sendMessage('message', response))
+        emit('message', response)
 
 
 @socket_server.on('print')
