@@ -22,7 +22,6 @@ socket.on('message', (event) => {
     var action = gameState["action"];
     gameState = JSON.parse(gameState["message"]);
     if (action === 'message'){
-        console.log(gameState["kill"]);
         convertingFromJson(gameState)
     }
     else if (action === 'init'){
@@ -30,7 +29,6 @@ socket.on('message', (event) => {
         var initialize = gameState;
         loc = initialize["location"];
         nameid = initialize["nameid"];
-        console.log(nameid, loc);
         socket.emit("update", createObject())
     }
     else if (action === 'update'){
@@ -51,7 +49,6 @@ function User(colorpalet, xer, yer) {
     stroke(255, 255, 255);
     var xy = colordetect("green");
     fill(color(xy));
-    console.log("HI")
     ellipse(50, 50, 20 * 2, 20 * 2);
 }
 
@@ -79,6 +76,8 @@ function colordetect(colorpalet){
 }
 
 function convertingFromJson(parsed){
+    FrontEndFood = [];
+    FrontEndplayers = [];
     var locations = parsed["locations"];
     for (var playerFood in locations){
         if(playerFood.substring(0,4) === "food"){
@@ -88,8 +87,6 @@ function convertingFromJson(parsed){
             FrontEndplayers.push(locations[playerFood])
         }
     }
-    console.log(FrontEndFood);
-    console.log(FrontEndplayers);
 }
 
 
@@ -130,13 +127,13 @@ function keyisPress(){
     if ((keyCode === UP_ARROW)) {
         obj = {};
         obj.nameid = nameid;
-        obj.keyPress = 'UP';
+        obj.keyPress = 'DOWN';
         socket.emit('controller', JSON.stringify(obj))
     }
     else if (keyCode === DOWN_ARROW) {
         obj = {};
         obj.nameid = nameid;
-        obj.keyPress = 'DOWN';
+        obj.keyPress = 'UP';
         socket.emit('controller', JSON.stringify(obj))
     }
     else if (keyCode === LEFT_ARROW) {
@@ -148,13 +145,11 @@ function keyisPress(){
     else if (keyCode === RIGHT_ARROW) {
         obj = {};
         obj.nameid = nameid;
-        obj.keyPress = 'LEFT';
+        obj.keyPress = 'RIGHT';
         socket.emit('controller', JSON.stringify(obj))
     }
-    else {
-        if (!killState){
-            socket.emit('update', createObject());
-        }
+    if (!killState){
+        socket.emit('update', createObject());
     }
 }
 

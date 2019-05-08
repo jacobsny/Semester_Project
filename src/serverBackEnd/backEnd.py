@@ -32,7 +32,7 @@ class Location:
 class Player(object):
     def __init__(self):
         self.location = Location(0, 0)
-        self.size = 5.0
+        self.size = 25.0
         self.killState = False
 
     def string(self):
@@ -82,7 +82,7 @@ class BackEnd:
     def generateFoodPlayer(self):
         ply = Player()
         ply.location.generateFood()
-        ply.size = 1
+        ply.size = 5.0
         return ply
 
     #endpoint for introducing a new player into the game.
@@ -105,18 +105,23 @@ class BackEnd:
     def kill(self, player):
         player.killState = True
 
+    def findRadii(self, r1, r2):
+        totalArea = math.pi * math.pow(r1, 2) + math.pi * math.pow(r2, 2)
+        return math.sqrt(totalArea / math.pi)
+
     #takes two player ids and checks sizes and sees who eats who
     #larger of the two gets increased in size that of the other
     #smaller gets killed
     def eat(self, obj, obj2):
         player1 = self.players[obj]
         player2 = self.players[obj2]
+        totalRadii = self.findRadii(player1.size, player2.size)
         if player1.size > player2.size:
             self.kill(player2)
-            player1.size += player2.size
+            player1.size = totalRadii
         elif player1.size < player2.size:
             self.kill(player1)
-            player2.size += player1.size
+            player2.size = totalRadii
 
     #mathematically calculates if two players touch or cross over
     def findIfIntersect(self, str, str1):
@@ -132,9 +137,9 @@ class BackEnd:
                 if user != user2 and self.findIfIntersect(user, user2):
                     self.eat(user, user2)
             for munch in self.food:
-                if self.findIfIntersect(user,munch):
-                    self.players[user].size += self.food[munch].size
-                    del self.food[munch]
+                if self.findIfIntersect(user, munch):
+                    self.food -= munch
+                    self.players[user].size += .1
 
     #converts to pixel use so Stephen can display on a 1920x1080
     def convertToMonitor(self, user, map):
@@ -160,11 +165,13 @@ class BackEnd:
         x = 960 - base[0]
         y = 540 - base[1]
         proximity = {}
-        proximity.update(self.players)
-        proximity.update(self.food)
-        for player in proximity:
-            temp = proximity[player].string()
-            proximity[player] = [temp[0]+x, temp[1]+y, temp[2]]
+        for player in self.players:
+            if not self.players[player].killState:
+                temp = self.players[player].string()
+                proximity[player] = [temp[0]+x, temp[1]+y, temp[2]]
+        for food in self.food:
+            temp = self.players[food].string()
+            proximity[food] = [temp[0]+x, temp[1]+y, temp[2]]
         kill = self.players[user].killState
         jsonMap = {"kill": kill, "locations": proximity}
         return (jsonMap)

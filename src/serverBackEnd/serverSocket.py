@@ -44,7 +44,7 @@ def got_message(username):
 def controller(data):
     data = json.loads(data)
     nameID = data['nameid']
-    if nameID  in backEndCode.players:
+    if nameID in backEndCode.players:
         action = data['keyPress']
         if action == 'UP':
             backEndCode.players[nameID].up()
@@ -70,11 +70,11 @@ def got_connection():
 #while also telling the player whether they are dead or not or if they have increased in size
 @socket_server.on('update')
 def updateShit(data):
+    backEndCode.checkCollision()
     data = json.loads(data)
     nameOfPlayer = data["nameid"]
     loc = data["location"]
     if nameOfPlayer in backEndCode.players:
-        print(backEndCode.players[nameOfPlayer].location.string())
         response = backEndCode.fromJSON(nameOfPlayer, loc)
         response = json.dumps(sendMessage('message', response))
         emit('message', response)
