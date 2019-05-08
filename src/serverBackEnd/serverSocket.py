@@ -1,4 +1,5 @@
 import json
+import threading
 from random import randint
 
 from flask import Flask, send_from_directory, request, render_template
@@ -20,8 +21,12 @@ usernameToSid = {}
 sidToUsername = {}
 
 
+def handle_message():
+    socket_server.emit('message', json.dumps(sendMessage('update', "")), broadcast=True)
+
+
 def sendMessage(type, response):
-    return {"action": type, "message": response}
+    return {"action": type, "message": (response)}
 
 #endpoint called that will create a new player when a person logs on
 @socket_server.on('register')
@@ -31,7 +36,7 @@ def got_message(username):
     print(username + " connected")
     response = backEndCode.newGuy()
     #send_to_js(username, 'initialize', response)
-    response = sendMessage('init', response)
+    response = json.dumps(sendMessage('init', response))
     emit('message', response)
 
 
@@ -49,8 +54,12 @@ def got_connection():
 #while also telling the player whether they are dead or not or if they have increased in size
 @socket_server.on('update')
 def updateShit(data):
-    response = backEndCode.fromJSON(json.dumps(data))
-    response = sendMessage('message', json.dumps(response))
+    print(data)
+    nameOfPlayer = data["nameid"]
+    loc = data["location"]
+    print(nameOfPlayer,loc)
+    response = backEndCode.fromJSON(nameOfPlayer, loc)
+    response = json.dumps(sendMessage('message', response))
     emit('message', response)
 
 
@@ -84,5 +93,6 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
+threading.Timer(0.0167, handle_message()).start()
 print("Python Server Running")
 socket_server.run(app, port=8080, debug=True)

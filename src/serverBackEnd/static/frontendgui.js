@@ -3,31 +3,39 @@ var FrontEndplayers = [];
 var colorer = "cyan";
 var killState = false;
 var speed = 5.0;
-var loc =[0,0];
+var loc =[0,0,0];
 var nameid = "";
 var username = "";
-//{transports: ['websocket']}
 
-var socket = io.connect('http://' + document.domain + ':' + location.port);
+var socket = io.connect({transports: ['websocket']});
 
 
 socket.on('message', (event) => {
-    var gameState = event;
+    var gameState = JSON.parse(event);
     var action = gameState["action"];
-    socket.emit('print', gameState);
+    gameState = JSON.parse(gameState["message"]);
     if (action === 'message'){
-        gameState = JSON.parse(gameState["message"]);
-        socket.emit('print', gameState);
+        console.log(gameState["kill"]);
         convertingFromJson(gameState)
     }
     else if (action === 'init'){
-        console.log("received initialize");
-        var initialize = JSON.parse(gameState["message"]);
-        console.log(initialize);
+        //console.log("received initialize");
+        var initialize = gameState;
         loc = initialize["location"];
         nameid = initialize["nameid"];
-
-        socket.emit("update", initialize)
+        console.log(nameid, loc);
+        socket.emit("update", (initialize))
+    }
+    else if (action === 'update'){
+        if (!killState){
+            var obj = '{'
+                +'"nameid" : '
+                + nameid
+                +'"location" : '
+                + loc.toString()
+                +'}';
+            socket.emit('update', obj);
+        }
     }
 });
 
@@ -71,15 +79,18 @@ function colordetect(colorpalet){
 function convertingFromJson(parsed){
     killState = parsed["kill"];
     var locations = parsed["locations"];
-    console.log(locations)
+    socket.emit('print', killState);
     for (var playerFood in locations){
-        if(playerFood.splice(0,4) == "food"){
+        socket.emit('print', playerFood);
+        if(playerFood.substring(0,4) === "food"){
             FrontEndFood.push(locations[playerFood])
         }
         else{
             FrontEndplayers.push(locations[playerFood])
         }
     }
+    console.log(FrontEndFood);
+    console.log(FrontEndplayers);
 }
 
 
@@ -91,12 +102,12 @@ function setup() {
 }
 
 function draw(){
-    console.log(FrontEndFood)
-    console.log(FrontEndplayers)
+    //console.log(FrontEndFood)
+    //console.log(FrontEndplayers)
     background(255,255,255);
     // fill(color(122, 0, 122));
     // ellipse(10, 10, 60, 60);
-    User(colorer, loc[0], loc[1], loc[2]);
+    User(colorer, loc[0], loc[1], 10*loc[2]);
     createFood(FrontEndFood);
     otherplayers(FrontEndplayers);
 }
@@ -115,55 +126,46 @@ function otherplayers(placeholder){
         fill(color(122, 0, 122));
         var i = placeholder[ind];
         ellipse(i[0], i[1], i[2], i[2]);
-        console.log(ind[0])//
+        //console.log(ind[0])//
     }
 }
 
 
-while (!killState){
-    document.addEventListener('keydown', function(e){
-        if ((e.key === '38')) {
-            loc[1] += speed;
-            socket_server.emit('print',JSON.stringify("UP"))
+document.addEventListener('keydown', function(e){
+    if ((e.key === '38')) {
+        loc[1] += speed;
+        socket.emit('print',JSON.stringify("UP"))
 
-        }
-        if (e.key === '40') {
-            loc[1] -= speed;
-            socket_server.emit('print',JSON.stringify("DOWN"))
-        }
-        if (e.key === '37') {
-            loc[0] -= speed;
-            socket_server.emit('print',JSON.stringify("LEFT"))
-        }
-        if (e.key === '39') {
-            loc[0] += speed;
-            socket_server.emit('print',JSON.stringify("RIGHT"))
-        }
-        if ((e.key === 'w')) {
-            loc[1] += speed;
-            socket_server.emit('print',JSON.stringify("UP"))
+    }
+    if (e.key === '40') {
+        loc[1] -= speed;
+        socket.emit('print',JSON.stringify("DOWN"))
+    }
+    if (e.key === '37') {
+        loc[0] -= speed;
+        socket.emit('print',JSON.stringify("LEFT"))
+    }
+    if (e.key === '39') {
+        loc[0] += speed;
+        socket.emit('print',JSON.stringify("RIGHT"))
+    }
+    if ((e.key === 'w')) {
+        loc[1] += speed;
+        socket.emit('print',JSON.stringify("UP"))
 
-        }
-        if (e.key === 's') {
-            loc[1] -= speed;
-            socket_server.emit('print',JSON.stringify("DOWN"))
-        }
-        if (e.key === 'a') {
-            loc[0] -= speed;
-            socket_server.emit('print',JSON.stringify("LEFT"))
-        }
-        if (e.key === 'd') {
-            loc[0] += speed;
-            socket_server.emit('print',JSON.stringify("RIGHT"))
-        }
-    });
-    var obj = '{'
-        +'"nameid" : '
-        + nameid
-        +'"location" : '
-        + loc.toString()
-        +'}';
-    socket_server.emit('update', obj)
-}
+    }
+    if (e.key === 's') {
+        loc[1] -= speed;
+        socket.emit('print',JSON.stringify("DOWN"))
+    }
+    if (e.key === 'a') {
+        loc[0] -= speed;
+        socket.emit('print',JSON.stringify("LEFT"))
+    }
+    if (e.key === 'd') {
+        loc[0] += speed;
+        socket.emit('print',JSON.stringify("RIGHT"))
+    }
+});
 
 

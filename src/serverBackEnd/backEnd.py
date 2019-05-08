@@ -163,7 +163,6 @@ class BackEnd:
         proximity = self.convertToMonitor(user, proximity)
         kill = self.players[user].killState
         jsonMap = {"kill": kill, "locations": proximity}
-        print("this is jsonmap" + str(jsonMap))
         return (jsonMap)
 
     #used if someone tries to make an invalid request and they're not present in the game
@@ -173,14 +172,10 @@ class BackEnd:
     #is the recipient of the POST request Stephen will make
     #first updates the player location
     #then returns the players around if they are a valid player
-    def fromJSON(self, string):
-        parsed = json.loads(string)
-        name = parsed["nameid"]
-        loc = parsed["location"]
+    def fromJSON(self, name, loc):
         if name in self.players:
             self.players[name].location = Location(loc[0], loc[1])
             ans = json.dumps(self.toJSON(name))
-            print(ans)
             return ans
         else:
             return self.invalidRequest()
