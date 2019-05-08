@@ -156,10 +156,15 @@ class BackEnd:
     #and the value in the locations map is an array of (x,y,size)
     #x and y are in terms of monitor coordinates not world coordinates
     def toJSON(self, user):
+        base = self.players[user].string()
+        x = 960 - base[0]
+        y = 540 - base[1]
         proximity = {}
         proximity.update(self.players)
         proximity.update(self.food)
-        proximity = self.convertToMonitor(user, proximity)
+        for player in proximity:
+            temp = proximity[player].string()
+            proximity[player] = [temp[0]+x, temp[1]+y, temp[2]]
         kill = self.players[user].killState
         jsonMap = {"kill": kill, "locations": proximity}
         return (jsonMap)
@@ -173,7 +178,6 @@ class BackEnd:
     #then returns the players around if they are a valid player
     def fromJSON(self, name, loc):
         if name in self.players:
-            self.players[name].location = Location(loc[0], loc[1])
             ans = json.dumps(self.toJSON(name))
             return ans
         else:
