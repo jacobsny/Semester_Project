@@ -1,7 +1,6 @@
-
 var FrontEndFood = [];
 var FrontEndplayers = [];
-var color = "cyan";
+var colorer = "cyan";
 var killState = false;
 var speed = 5.0;
 var loc =[0,0];
@@ -39,12 +38,42 @@ socket.on('connect', ()=> {
 function initializeGame(inputUsername) {
     username = inputUsername;
 }
+function User(colorpalet, x, y, size) {
+        stroke(255, 255, 255)
+        var xy = colordetect(colorpalet);
+        fill(color(xy));
+        ellipse(x, y, size * 2, size * 2);
+}
+
+
+function colordetect(colorpalet){
+    if (colorpalet == "blue") {
+        var cols = color(0, 0, 255)
+    }
+    if (colorpalet == "yellow") {
+        var cols =color(247, 255, 0)
+    }
+    if (colorpalet == "magenta") {
+        var cols =color(255, 0, 222)
+    }
+    if (colorpalet == "cyan") {
+        var cols =color(54, 247, 288)
+    }
+    if (colorpalet == "red") {
+        var cols =color(255, 0, 0)
+    }
+    if (colorpalet == "green") {
+        var cols =color(0, 255, 0)
+    }
+    return cols
+}
 
 function convertingFromJson(parsed){
     killState = parsed["kill"];
     var locations = parsed["locations"];
-    for (var playerFood of locations){
-        if(playerFood.splice(0,4) === "food"){
+    console.log(locations)
+    for (var playerFood in locations){
+        if(playerFood.splice(0,4) == "food"){
             FrontEndFood.push(locations[playerFood])
         }
         else{
@@ -54,21 +83,22 @@ function convertingFromJson(parsed){
 }
 
 
-
 function setup() {
-    var aspectX = 900;
-    var aspectY = 900;
+    var aspectX = 1920;
+    var aspectY = 1080;
     createCanvas(aspectX, aspectY);
-    if (killState === false) {
-        user = new User(color);
-    }
+
 }
 
 function draw(){
-    user.show(loc[0], loc[1], loc[2]);
+    console.log(FrontEndFood)
+    console.log(FrontEndplayers)
     background(255,255,255);
+    // fill(color(122, 0, 122));
+    // ellipse(10, 10, 60, 60);
+    User(colorer, loc[0], loc[1], loc[2]);
     createFood(FrontEndFood);
-    otherplayers(FrontEndplayers)
+    otherplayers(FrontEndplayers);
 }
 
 function createFood(placeholder){
@@ -79,12 +109,13 @@ function createFood(placeholder){
         //console.log(ind[0])//
     }
 }
+
 function otherplayers(placeholder){
     for (var ind in placeholder) {
-        fill(color(22, 33, 122));
+        fill(color(122, 0, 122));
         var i = placeholder[ind];
         ellipse(i[0], i[1], i[2], i[2]);
-        //console.log(ind[0])//
+        console.log(ind[0])//
     }
 }
 
@@ -132,7 +163,6 @@ while (!killState){
         +'"location" : '
         + loc.toString()
         +'}';
-    socket_server.emit("print", JSON.stringify("Sending Update"));
     socket_server.emit('update', obj)
 }
 

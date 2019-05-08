@@ -36,7 +36,7 @@ class Player(object):
         self.killState = False
 
     def string(self):
-        return "[" + str(self.location.x) + "," + str(self.location.y) + "," + str(self.size) + "]"
+        return [self.location.x, self.location.y, self.size]
 #future map holding all players
 #future map holding all food
 

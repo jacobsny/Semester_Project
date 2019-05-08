@@ -30,4 +30,4 @@ function colordetect(colorpalet){
     return cols
 }
 
-module.exports = colordetect;
+//module.exports = colordetect;
