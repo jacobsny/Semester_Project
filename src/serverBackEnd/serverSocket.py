@@ -2,13 +2,14 @@ import json
 from random import randint
 
 from flask import Flask, send_from_directory, request, render_template
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 
 
 from serverBackEnd import backEnd
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'aseopjikvnjkavcwoawojaf389012348679'
 socket_server = SocketIO(app)
 
 backEndCode = backEnd.BackEnd()
@@ -17,21 +18,19 @@ usernameToSid = {}
 sidToUsername = {}
 
 
-def send_to_js(username, type, data):
-    user_socket = usernameToSid.get(username,None)
-    if user_socket:
-        socket_server.emit(type, data, room=user_socket)
-
+def sendMessage(type, response):
+    return {"action": type, "message": response}
 
 #endpoint called that will create a new player when a person logs on
 @socket_server.on('register')
 def got_message(username):
     usernameToSid[username] = request.sid
     sidToUsername[request.sid] = username
-    print(username + " connected at: " + request.sid)
+    print(username + " connected")
     response = backEndCode.newGuy()
-    print("sending message to: " + request.sid)
-    send_to_js(username, 'initialize', response)
+    #send_to_js(username, 'initialize', response)
+    response = sendMessage('init', response)
+    emit('message', response)
 
 
 @socket_server.on('disconnect')
@@ -48,12 +47,9 @@ def got_connection():
 #while also telling the player whether they are dead or not or if they have increased in size
 @socket_server.on('update')
 def updateShit(data):
-    print("update Called")
-    #data is array [x,y]
-    username = sidToUsername[request.sid]
-    message = {"nameid": username, "location": json.loads(data)}
-    response = backEndCode.fromJSON(message)
-    send_to_js(username, 'message', response)
+    response = backEndCode.fromJSON(json.dumps(data))
+    response = sendMessage('message', json.dumps(response))
+    emit('message', response)
 
 
 @socket_server.on('print')
@@ -84,6 +80,7 @@ def static_files(filename):
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
+
 
 print("Python Server Running")
 socket_server.run(app, port=8080, debug=True)

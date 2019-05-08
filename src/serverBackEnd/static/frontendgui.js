@@ -1,51 +1,50 @@
-//const io = require("socket.io-client");
 
 var FrontEndFood = [];
 var FrontEndplayers = [];
 var color = "cyan";
-
-
 var killState = false;
 var speed = 5.0;
 var loc =[0,0];
 var nameid = "";
 var username = "";
+//{transports: ['websocket']}
 
-var socket = io.connect({transports: ['websocket']});
+var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-setupSocket();
 
-console.log("openedGame");
-function setupSocket() {
-
-    socket.on('message', (event) => {
-        console.log("received message");
-        var gameState = JSON.parse(event);
-        console.log(gameState);
+socket.on('message', (event) => {
+    var gameState = event;
+    var action = gameState["action"];
+    socket.emit('print', gameState);
+    if (action === 'message'){
+        gameState = JSON.parse(gameState["message"]);
+        socket.emit('print', gameState);
         convertingFromJson(gameState)
-
-    });
-    socket.on('initialize', (event)=> {
+    }
+    else if (action === 'init'){
         console.log("received initialize");
-        var initialize = JSON.parse(event);
+        var initialize = JSON.parse(gameState["message"]);
         console.log(initialize);
         loc = initialize["location"];
         nameid = initialize["nameid"];
-    });
-}
 
+        socket.emit("update", initialize)
+    }
+});
+
+socket.on('connect', ()=> {
+    socket.emit("register", username);
+});
 
 function initializeGame(inputUsername) {
     username = inputUsername;
-    console.log("Sending Register");
-    socket.emit("register", username);
 }
 
 function convertingFromJson(parsed){
     killState = parsed["kill"];
     var locations = parsed["locations"];
     for (var playerFood of locations){
-        if(playerFood[0] === "f" || playerFood[0] === 'f' || playerFood.contains("food")){
+        if(playerFood.splice(0,4) === "food"){
             FrontEndFood.push(locations[playerFood])
         }
         else{
@@ -54,10 +53,6 @@ function convertingFromJson(parsed){
     }
 }
 
-function loadVisual(gameStateDict){
-    killState = gameStateDict["kill"]
-    //set up everything for visual
-}
 
 
 function setup() {
@@ -77,58 +72,58 @@ function draw(){
 }
 
 function createFood(placeholder){
-        for (var ind in placeholder) {
-            fill(color(122, 0, 122));
-            var i = placeholder[ind];
-            ellipse(i[0], i[1], i[2], i[2]);
-            //console.log(ind[0])//
-        }
+    for (var ind in placeholder) {
+        fill(color(122, 0, 122));
+        var i = placeholder[ind];
+        ellipse(i[0], i[1], i[2], i[2]);
+        //console.log(ind[0])//
     }
-    function otherplayers(placeholder){
-        for (var ind in placeholder) {
-            fill(color(22, 33, 122));
-            var i = placeholder[ind];
-            ellipse(i[0], i[1], i[2], i[2]);
-            //console.log(ind[0])//
-        }
+}
+function otherplayers(placeholder){
+    for (var ind in placeholder) {
+        fill(color(22, 33, 122));
+        var i = placeholder[ind];
+        ellipse(i[0], i[1], i[2], i[2]);
+        //console.log(ind[0])//
     }
+}
 
 
 while (!killState){
     document.addEventListener('keydown', function(e){
         if ((e.key === '38')) {
             loc[1] += speed;
-            socket.emit('print',"UP")
+            socket_server.emit('print',JSON.stringify("UP"))
 
         }
         if (e.key === '40') {
             loc[1] -= speed;
-            socket.emit('print',"DOWN")
+            socket_server.emit('print',JSON.stringify("DOWN"))
         }
         if (e.key === '37') {
             loc[0] -= speed;
-            socket.emit('print',"LEFT")
+            socket_server.emit('print',JSON.stringify("LEFT"))
         }
         if (e.key === '39') {
             loc[0] += speed;
-            socket.emit('print',"RIGHT")
+            socket_server.emit('print',JSON.stringify("RIGHT"))
         }
         if ((e.key === 'w')) {
             loc[1] += speed;
-            socket.emit('print',"UP")
+            socket_server.emit('print',JSON.stringify("UP"))
 
         }
         if (e.key === 's') {
             loc[1] -= speed;
-            socket.emit('print',"DOWN")
+            socket_server.emit('print',JSON.stringify("DOWN"))
         }
         if (e.key === 'a') {
             loc[0] -= speed;
-            socket.emit('print',"LEFT")
+            socket_server.emit('print',JSON.stringify("LEFT"))
         }
         if (e.key === 'd') {
             loc[0] += speed;
-            socket.emit('print',"RIGHT")
+            socket_server.emit('print',JSON.stringify("RIGHT"))
         }
     });
     var obj = '{'
@@ -137,6 +132,8 @@ while (!killState){
         +'"location" : '
         + loc.toString()
         +'}';
-    socket.emit('update', obj)
+    socket_server.emit("print", JSON.stringify("Sending Update"));
+    socket_server.emit('update', obj)
 }
+
 
