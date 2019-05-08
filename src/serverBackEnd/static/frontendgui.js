@@ -9,6 +9,13 @@ var username = "";
 
 var socket = io.connect({transports: ['websocket']});
 
+function createObject() {
+    var obj = {};
+    obj.nameid = nameid;
+    obj.location = loc;
+    return JSON.stringify(obj)
+}
+
 
 socket.on('message', (event) => {
     var gameState = JSON.parse(event);
@@ -24,17 +31,11 @@ socket.on('message', (event) => {
         loc = initialize["location"];
         nameid = initialize["nameid"];
         console.log(nameid, loc);
-        socket.emit("update", (initialize))
+        socket.emit("update", createObject())
     }
     else if (action === 'update'){
         if (!killState){
-            var obj = '{'
-                +'"nameid" : '
-                + nameid
-                +'"location" : '
-                + loc.toString()
-                +'}';
-            socket.emit('update', obj);
+            socket.emit('update', createObject());
         }
     }
 });
@@ -47,7 +48,7 @@ function initializeGame(inputUsername) {
     username = inputUsername;
 }
 function User(colorpalet, x, y, size) {
-        stroke(255, 255, 255)
+        stroke(255, 255, 255);
         var xy = colordetect(colorpalet);
         fill(color(xy));
         ellipse(x, y, size * 2, size * 2);
@@ -81,7 +82,6 @@ function convertingFromJson(parsed){
     var locations = parsed["locations"];
     socket.emit('print', killState);
     for (var playerFood in locations){
-        socket.emit('print', playerFood);
         if(playerFood.substring(0,4) === "food"){
             FrontEndFood.push(locations[playerFood])
         }
@@ -95,8 +95,8 @@ function convertingFromJson(parsed){
 
 
 function setup() {
-    var aspectX = 1920;
-    var aspectY = 1080;
+    var aspectX = window.innerWidth;
+    var aspectY = window.innerHeight;
     createCanvas(aspectX, aspectY);
 
 }
@@ -107,7 +107,7 @@ function draw(){
     background(255,255,255);
     // fill(color(122, 0, 122));
     // ellipse(10, 10, 60, 60);
-    User(colorer, loc[0], loc[1], 10*loc[2]);
+    User(colorer, loc[0], loc[1], loc[2]);
     createFood(FrontEndFood);
     otherplayers(FrontEndplayers);
 }
@@ -132,39 +132,31 @@ function otherplayers(placeholder){
 
 
 document.addEventListener('keydown', function(e){
-    if ((e.key === '38')) {
+    if ((e.key === '38') || (e.key === 'w')) {
         loc[1] += speed;
-        socket.emit('print',JSON.stringify("UP"))
+        socket.emit('print',JSON.stringify("UP"));
+
 
     }
-    if (e.key === '40') {
+    if (e.key === '40' || (e.key === 's')) {
         loc[1] -= speed;
-        socket.emit('print',JSON.stringify("DOWN"))
-    }
-    if (e.key === '37') {
-        loc[0] -= speed;
-        socket.emit('print',JSON.stringify("LEFT"))
-    }
-    if (e.key === '39') {
-        loc[0] += speed;
-        socket.emit('print',JSON.stringify("RIGHT"))
-    }
-    if ((e.key === 'w')) {
-        loc[1] += speed;
-        socket.emit('print',JSON.stringify("UP"))
+        socket.emit('print',JSON.stringify("DOWN"));
 
     }
-    if (e.key === 's') {
-        loc[1] -= speed;
-        socket.emit('print',JSON.stringify("DOWN"))
-    }
-    if (e.key === 'a') {
+    if (e.key === '37' || (e.key === 'a')) {
         loc[0] -= speed;
-        socket.emit('print',JSON.stringify("LEFT"))
+        socket.emit('print',JSON.stringify("LEFT"));
+
     }
-    if (e.key === 'd') {
+    if (e.key === '39' || (e.key === 'd')) {
         loc[0] += speed;
-        socket.emit('print',JSON.stringify("RIGHT"))
+        socket.emit('print',JSON.stringify("RIGHT"));
+
+    }
+    else {
+        if (!killState){
+            socket.emit('update', createObject());
+        }
     }
 });
 

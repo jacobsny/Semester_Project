@@ -54,6 +54,7 @@ def got_connection():
 #while also telling the player whether they are dead or not or if they have increased in size
 @socket_server.on('update')
 def updateShit(data):
+    data = json.loads(data)
     print(data)
     nameOfPlayer = data["nameid"]
     loc = data["location"]
@@ -93,6 +94,5 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
-threading.Timer(0.0167, handle_message()).start()
 print("Python Server Running")
 socket_server.run(app, port=8080, debug=True)

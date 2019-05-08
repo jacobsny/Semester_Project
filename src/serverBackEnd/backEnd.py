@@ -152,14 +152,12 @@ class BackEnd:
         proximity = {}
         for users in self.players:
             loc = self.players[users].location
-            if (xLower < loc.x < xUpper) and (yLower < loc.y < yUpper):
-                proximity.update({users: self.players[users]})
-                #proximity[users] = players[users]
+            proximity.update({users: self.players[users]})
+            #proximity[users] = players[users]
         for munch in self.food:
             loc = self.players[munch].location
-            if (xLower < loc.x < xUpper) and (yLower < loc.y < yUpper):
-                proximity.update({munch: self.food[munch]})
-                #proximity[munch] = food[munch]
+            proximity.update({munch: self.food[munch]})
+            #proximity[munch] = food[munch]
         proximity = self.convertToMonitor(user, proximity)
         kill = self.players[user].killState
         jsonMap = {"kill": kill, "locations": proximity}
