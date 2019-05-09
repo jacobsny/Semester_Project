@@ -131,6 +131,7 @@ class BackEnd:
         if not player1.killState and not player2.killState:
             if player1.size > player2.size:
                 self.kill(player2)
+                del self.food[player2]
                 player1.size = totalRadii
             elif player1.size < player2.size:
                 self.kill(player1)
@@ -181,8 +182,9 @@ class BackEnd:
                 temp = self.players[player].string()
                 proximity[player] = [temp[0]+x, temp[1]+y, temp[2]]
         for food in self.food:
-            temp = self.players[food].string()
-            proximity[food] = [temp[0]+x, temp[1]+y, temp[2]]
+            if not self.food[food].killState:
+                temp = self.players[food].string()
+                proximity[food] = [temp[0]+x, temp[1]+y, temp[2]]
         kill = self.players[user].killState
         jsonMap = {"kill": kill, "locations": proximity}
         return (jsonMap)
