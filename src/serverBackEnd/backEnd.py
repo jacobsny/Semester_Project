@@ -116,7 +116,7 @@ class BackEnd:
         player1 = self.players[obj]
         player2 = self.players[obj2]
         totalRadii = self.findRadii(player1.size, player2.size)
-        if not player1.killState or not player2.killState:
+        if not player1.killState and not player2.killState:
             if player1.size > player2.size:
                 self.kill(player2)
                 player1.size = totalRadii
@@ -131,7 +131,6 @@ class BackEnd:
         if not player1.killState and not player2.killState:
             if player1.size > player2.size:
                 self.kill(player2)
-                print(player1.size, totalRadii)
                 player1.size = totalRadii
             elif player1.size < player2.size:
                 self.kill(player1)
