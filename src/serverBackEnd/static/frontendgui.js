@@ -108,7 +108,7 @@ function createFood(placeholder){
     for (var ind in placeholder) {
         fill(color(122, 0, 122));
         var i = placeholder[ind];
-        ellipse(i[0], i[1], i[2], i[2]);
+        ellipse(i[0], i[1], 2*i[2], 2*i[2]);
         //console.log(ind[0])//
     }
 }
@@ -117,7 +117,7 @@ function otherplayers(placeholder){
     for (var ind in placeholder) {
         fill(color(122, 0, 122));
         var i = placeholder[ind];
-        ellipse(i[0], i[1], i[2], i[2]);
+        ellipse(i[0], i[1], 2*i[2], 2*i[2]);
         //console.log(ind[0])//
     }
 }
