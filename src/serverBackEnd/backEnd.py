@@ -82,7 +82,7 @@ class BackEnd:
     def generateFoodPlayer(self):
         ply = Player()
         ply.location.generateFood()
-        ply.size = 5.0
+        ply.size = 15.0
         return ply
 
     #endpoint for introducing a new player into the game.
@@ -99,7 +99,7 @@ class BackEnd:
     def newFood(self):
         foodBit = self.generateFood()
         munch = self.generateFoodPlayer()
-        self.players[foodBit] = munch
+        self.food[foodBit] = munch
 
     #set kill state in map of player with id in parameter to true
     def kill(self, player):
@@ -131,7 +131,7 @@ class BackEnd:
         if not player1.killState and not player2.killState:
             if player1.size > player2.size:
                 self.kill(player2)
-                del self.food[player2]
+                print(player1.size, totalRadii)
                 player1.size = totalRadii
             elif player1.size < player2.size:
                 self.kill(player1)
@@ -144,13 +144,19 @@ class BackEnd:
         totalSize = self.players[str].size + self.players[str1].size
         return user1.distance(user2) <= totalSize
 
+    def findIfIntersectFood(self, str, str1):
+        user1 = self.players[str].location
+        user2 = self.food[str1].location
+        totalSize = self.players[str].size + self.food[str1].size
+        return user1.distance(user2) <= totalSize
+
     #checks all of maps to see if any players or food intersect
     def checkCollision(self, user):
         for user2 in self.players:
             if user != user2 and self.findIfIntersect(user, user2):
                 self.eat(user, user2)
         for munch in self.food:
-            if self.findIfIntersect(user, munch):
+            if self.findIfIntersectFood(user, munch):
                 self.eatFood(user, munch)
 
     #converts to pixel use so Stephen can display on a 1920x1080
@@ -183,7 +189,7 @@ class BackEnd:
                 proximity[player] = [temp[0]+x, temp[1]+y, temp[2]]
         for food in self.food:
             if not self.food[food].killState:
-                temp = self.players[food].string()
+                temp = self.food[food].string()
                 proximity[food] = [temp[0]+x, temp[1]+y, temp[2]]
         kill = self.players[user].killState
         jsonMap = {"kill": kill, "locations": proximity}

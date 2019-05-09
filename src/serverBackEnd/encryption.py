@@ -1,7 +1,7 @@
 import bcrypt
 import sqlite3
 import json
-import serverFlask
+
 import requests
 from flask import Flask
 app = Flask(__name__)
@@ -73,6 +73,7 @@ def log_on():
     info = serverFlask.newPlayer
     json.loads(info)
     print(json.loads(info))
+
 
 
 
