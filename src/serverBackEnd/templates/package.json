@@ -8,6 +8,9 @@
   "scripts": {
     "start": "electron ."
   },
+  "web-preferences": {
+    "web-security": false
+  },
   "files": [
     "file:///C:/Users/Stephen%20Malinowski/IdeaProjects/Semester_Projectpls/src/serverBackEnd/static/frontendgui.js",
     "build",
