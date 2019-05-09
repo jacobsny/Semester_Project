@@ -1,7 +1,5 @@
 import json
-import threading
 from random import randint
-
 from flask import Flask, send_from_directory, request, render_template
 from flask_socketio import SocketIO, emit
 
@@ -70,7 +68,6 @@ def got_connection():
 #while also telling the player whether they are dead or not or if they have increased in size
 @socket_server.on('update')
 def updateShit(data):
-    backEndCode.checkCollision()
     data = json.loads(data)
     nameOfPlayer = data["nameid"]
     loc = data["location"]
@@ -112,3 +109,5 @@ def page_not_found(e):
 
 print("Python Server Running")
 socket_server.run(app, port=8080, debug=True)
+
+

@@ -116,12 +116,25 @@ class BackEnd:
         player1 = self.players[obj]
         player2 = self.players[obj2]
         totalRadii = self.findRadii(player1.size, player2.size)
-        if player1.size > player2.size:
-            self.kill(player2)
-            player1.size = totalRadii
-        elif player1.size < player2.size:
-            self.kill(player1)
-            player2.size = totalRadii
+        if not player1.killState or not player2.killState:
+            if player1.size > player2.size:
+                self.kill(player2)
+                player1.size = totalRadii
+            elif player1.size < player2.size:
+                self.kill(player1)
+                player2.size = totalRadii
+
+    def eatFood(self, obj, obj2):
+        player1 = self.players[obj]
+        player2 = self.food[obj2]
+        totalRadii = self.findRadii(player1.size, player2.size)
+        if not player1.killState or not player2.killState:
+            if player1.size > player2.size:
+                self.kill(player2)
+                player1.size = totalRadii
+            elif player1.size < player2.size:
+                self.kill(player1)
+                player2.size = totalRadii
 
     #mathematically calculates if two players touch or cross over
     def findIfIntersect(self, str, str1):
@@ -131,15 +144,13 @@ class BackEnd:
         return user1.distance(user2) <= totalSize
 
     #checks all of maps to see if any players or food intersect
-    def checkCollision(self):
-        for user in self.players:
-            for user2 in self.players:
-                if user != user2 and self.findIfIntersect(user, user2):
-                    self.eat(user, user2)
-            for munch in self.food:
-                if self.findIfIntersect(user, munch):
-                    self.food -= munch
-                    self.players[user].size += .1
+    def checkCollision(self, user):
+        for user2 in self.players:
+            if user != user2 and self.findIfIntersect(user, user2):
+                self.eat(user, user2)
+        for munch in self.food:
+            if self.findIfIntersect(user, munch):
+                self.eatFood(user, munch)
 
     #converts to pixel use so Stephen can display on a 1920x1080
     def convertToMonitor(self, user, map):
@@ -185,9 +196,8 @@ class BackEnd:
     #then returns the players around if they are a valid player
     def fromJSON(self, name, loc):
         if name in self.players:
+            self.checkCollision(name)
             ans = json.dumps(self.toJSON(name))
             return ans
         else:
             return self.invalidRequest()
-
-
