@@ -91,12 +91,13 @@ function convertingFromJson(parsed){
 
 
 function setup() {
-    var aspectX = window.innerWidth - 10;
-    var aspectY = window.innerHeight - 10;
+    var aspectX = window.innerWidth;
+    var aspectY = window.innerHeight;
     createCanvas(aspectX, aspectY);
-
 }
-
+function windowResized() {
+    resizeCanvas(window.innerWidth, window.innerHeight);
+}
 function draw(){
     background(255,255,255);
     keyisPress();
@@ -105,8 +106,10 @@ function draw(){
 }
 
 function createFood(placeholder){
+    var counter = 0
     for (var ind in placeholder) {
-        fill(color(122, 0, 122));
+        var xy = colordetect("blue");
+        fill(color(xy));
         var i = placeholder[ind];
         ellipse(i[0], i[1], 2*i[2], 2*i[2]);
         //console.log(ind[0])//
@@ -115,7 +118,8 @@ function createFood(placeholder){
 
 function otherplayers(placeholder){
     for (var ind in placeholder) {
-        fill(color(122, 0, 122));
+        var xy = colordetect("green");
+        fill(color(xy));
         var i = placeholder[ind];
         ellipse(i[0], i[1], 2*i[2], 2*i[2]);
         //console.log(ind[0])//

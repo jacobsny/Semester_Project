@@ -22,8 +22,8 @@ class Location:
         self.y = randint(-50, 50)
 
     def generateFood(self):
-        self.x = randint(-300, 300)
-        self.y = randint(-300, 300)
+        self.x = randint(-1400, 1400)
+        self.y = randint(-1400, 1400)
 
     def string(self):
         return str([self.x, self.y])
@@ -41,16 +41,16 @@ class Player(object):
     #future map holding all food
 
     def up(self):
-        self.location.y += 1
+        self.location.y += 2
 
     def down(self):
-        self.location.y -= 1
+        self.location.y -= 2
 
     def left(self):
-        self.location.x -= 1
+        self.location.x -= 2
 
     def right(self):
-        self.location.x += 1
+        self.location.x += 2
 
 
 class BackEnd:

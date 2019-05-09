@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = 'aseopjikvnjkavcwoawojaf389012348679'
 socket_server = SocketIO(app)
 
 backEndCode = backEnd.BackEnd()
-for i in range(20):
+for i in range(120):
     backEndCode.newFood()
 
 usernameToSid = {}
