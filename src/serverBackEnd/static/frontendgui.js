@@ -91,8 +91,8 @@ function convertingFromJson(parsed){
 
 
 function setup() {
-    var aspectX = window.innerWidth;
-    var aspectY = window.innerHeight;
+    var aspectX = window.innerWidth - 40;
+    var aspectY = window.innerHeight - 20;
     createCanvas(aspectX, aspectY);
 
 }

@@ -8,6 +8,11 @@
   "scripts": {
     "start": "electron ."
   },
+  "files": [
+    "file:///C:/Users/Stephen%20Malinowski/IdeaProjects/Semester_Projectpls/src/serverBackEnd/static/frontendgui.js",
+    "build",
+    "node_modules"
+  ],
   "dependencies": {
     "xmlhttprequest": "^1.8.0",
     "socket.io-client": "latest"
