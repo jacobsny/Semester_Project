@@ -104,13 +104,19 @@ function draw(){
     createFood(FrontEndFood);
     otherplayers(FrontEndplayers);
 }
-
+function convertMonitor(array){
+    var x = window.innerWidth / 2 - 960;
+    var y = window.innerHeight / 2 -540;
+    array[0] += x;
+    array[1] += y;
+    return array
+}
 function createFood(placeholder){
     var counter = 0
     for (var ind in placeholder) {
         var xy = colordetect("blue");
         fill(color(xy));
-        var i = placeholder[ind];
+        var i = convertMonitor(placeholder[ind]);
         ellipse(i[0], i[1], 2*i[2], 2*i[2]);
         //console.log(ind[0])//
     }
@@ -120,7 +126,7 @@ function otherplayers(placeholder){
     for (var ind in placeholder) {
         var xy = colordetect("green");
         fill(color(xy));
-        var i = placeholder[ind];
+        var i = convertMonitor(placeholder[ind]);
         ellipse(i[0], i[1], 2*i[2], 2*i[2]);
         //console.log(ind[0])//
     }

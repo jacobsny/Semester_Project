@@ -201,7 +201,7 @@ class BackEnd:
     #is the recipient of the POST request Stephen will make
     #first updates the player location
     #then returns the players around if they are a valid player
-    def fromJSON(self, name, loc):
+    def fromJSON(self, name):
         if name in self.players:
             self.checkCollision(name)
             ans = json.dumps(self.toJSON(name))

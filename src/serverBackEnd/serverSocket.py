@@ -72,7 +72,7 @@ def updateShit(data):
     nameOfPlayer = data["nameid"]
     loc = data["location"]
     if nameOfPlayer in backEndCode.players:
-        response = backEndCode.fromJSON(nameOfPlayer, loc)
+        response = backEndCode.fromJSON(nameOfPlayer)
         response = json.dumps(sendMessage('message', response))
         emit('message', response)
 
